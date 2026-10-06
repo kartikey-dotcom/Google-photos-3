@@ -541,8 +541,6 @@ if selected_nav == "🖼️ Photos":
         st.button("🏥 Health Cabinet AI Lens", key="photos_hc_btn", on_click=go_to_health_cabinet, use_container_width=True)
         
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("<h4 style='font-weight: 500; color:#202124;'>Timeline</h4>", unsafe_allow_html=True)
-    cols = st.columns(4)
     clinical_imgs = [c['img'] for s in health_sections for c in s['cards']]
     mixed = family_photos.copy()
     import random
@@ -553,9 +551,21 @@ if selected_nav == "🖼️ Photos":
     mixed.insert(5, clinical_imgs[3]) # Receipt
     mixed.insert(7, clinical_imgs[10]) # Ibuprofen script
     mixed.extend([img for img in clinical_imgs if img not in (clinical_imgs[0], clinical_imgs[3], clinical_imgs[10])])
-    for i, img in enumerate(mixed):
-        with cols[i % 4]:
-            st.markdown(f'<div class="legacy-img-container"><img src="{img}"></div>', unsafe_allow_html=True)
+    
+    # Group photos by fake timeline dates for realistic Google Photos look
+    timeline_groups = [
+        ("Today", mixed[:4]),
+        ("Yesterday", mixed[4:12]),
+        ("Sunday, October 27", mixed[12:24]),
+        ("Last Week", mixed[24:])
+    ]
+    
+    for date_label, photos in timeline_groups:
+        st.markdown(f"<h5 style='font-weight: 500; color:#5f6368; margin-top: 20px; margin-bottom: 10px;'>{date_label}</h5>", unsafe_allow_html=True)
+        cols = st.columns(4)
+        for i, img in enumerate(photos):
+            with cols[i % 4]:
+                st.markdown(f'<div class="legacy-img-container"><img src="{img}"></div>', unsafe_allow_html=True)
 
 elif selected_nav == "🏥 Health Cabinet":
     
