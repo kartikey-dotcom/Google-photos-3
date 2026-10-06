@@ -3,6 +3,13 @@ import time
 
 st.set_page_config(layout="wide", page_title="Google Photos", initial_sidebar_state="expanded")
 
+# Initialize session state for search
+if "search_query" not in st.session_state:
+    st.session_state.search_query = ""
+
+def set_search(query):
+    st.session_state.search_query = query
+
 # Inject Custom CSS to override Streamlit's default styling
 st.markdown("""
 <style>
@@ -74,6 +81,26 @@ st.markdown("""
         box-shadow: 0 1px 1px 0 rgba(65,69,73,0.3),0 1px 3px 1px rgba(65,69,73,0.15);
     }
     
+    /* Suggestion Chips (Overrides default stButton) */
+    [data-testid="stButton"] button {
+        border-radius: 16px !important;
+        padding: 4px 16px !important;
+        background-color: #ffffff !important;
+        border: 1px solid #dadce0 !important;
+        color: #5f6368 !important;
+        font-size: 13px !important;
+        min-height: 32px !important;
+        height: 32px !important;
+        line-height: 1 !important;
+        margin-top: -10px !important;
+        transition: all 0.2s;
+    }
+    [data-testid="stButton"] button:hover {
+        background-color: #f1f3f4 !important;
+        color: #202124 !important;
+        border-color: #bdc1c6 !important;
+    }
+    
     /* Main Area Horizontal Radio Toggle */
     .main-toggle [data-testid="stRadio"] > div {
         display: inline-flex;
@@ -99,25 +126,6 @@ st.markdown("""
     .main-toggle [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] p {
         color: var(--accent) !important;
         font-weight: 600 !important;
-    }
-    
-    /* Filter Chips */
-    .filter-row {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 15px;
-        flex-wrap: wrap;
-    }
-    .chip {
-        background-color: #ffffff;
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 6px 16px;
-        font-size: 13px;
-        color: var(--text-main);
-        display: flex;
-        align-items: center;
-        gap: 6px;
     }
     
     /* Evidence Cards */
@@ -489,13 +497,22 @@ if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
     # 2. INTERACTIVE TOP BAR SEARCH
     col1, col2 = st.columns([5, 1])
     with col1:
-        search_query = st.text_input("Search", value="", placeholder="🔍 Try searching: 'plumbing', 'stone slab', 'concrete', 'certificate', or 'pipe'", label_visibility="collapsed")
+        st.session_state.search_query = st.text_input("Search", key="search_query", placeholder="🔍 Try searching: 'plumbing', 'stone slab', 'concrete', 'certificate', or 'pipe'", label_visibility="collapsed")
     with col2:
-        if search_query:
+        if st.session_state.search_query:
             st.markdown('<div style="background-color: #fef7e0; color: #b06000; padding: 6px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #fbbc04; font-weight: 600; text-align: center; margin-top: 2px;">✨ Evidence Lens: Active</div>', unsafe_allow_html=True)
         else:
             st.markdown('<div style="background-color: #f1f3f4; color: #5f6368; padding: 6px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #dadce0; font-weight: 600; text-align: center; margin-top: 2px;">✨ Evidence Lens</div>', unsafe_allow_html=True)
             
+    # Interactive Suggestion Chips
+    s_cols = st.columns([1.2, 1.2, 1.2, 1.2, 1.2, 4])
+    s_cols[0].button("🔧 Plumbing", on_click=set_search, args=("plumbing",))
+    s_cols[1].button("🪨 Stone Slab", on_click=set_search, args=("stone slab",))
+    s_cols[2].button("🏗️ Concrete", on_click=set_search, args=("concrete",))
+    s_cols[3].button("📄 Lab Report", on_click=set_search, args=("lab report",))
+    if st.session_state.search_query:
+        s_cols[4].button("✖ Clear", on_click=set_search, args=("",))
+        
     st.markdown("<br>", unsafe_allow_html=True)
     
     default_mode_index = 1 if selected_nav == "📁 Evidence Partition" else 0
@@ -521,8 +538,8 @@ if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
         has_results = False
         
         for section in sections:
-            if search_query:
-                q = search_query.lower()
+            if st.session_state.search_query:
+                q = st.session_state.search_query.lower()
                 filtered_cards = [
                     c for c in section["cards"] 
                     if q in c["title"].lower() 
@@ -575,11 +592,11 @@ if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
                         st.markdown(html, unsafe_allow_html=True)
                         
         if not has_results:
-            st.info(f"No evidence assets found matching '{search_query}'. Try searching for 'plumbing', 'stone', 'document', or 'concrete'.")
+            st.info(f"No evidence assets found matching '{st.session_state.search_query}'. Try searching for 'plumbing', 'stone', 'document', or 'concrete'.")
             
     else:
         # LEGACY MODE
-        if search_query:
+        if st.session_state.search_query:
             with st.spinner('Searching Google Photos...'):
                 time.sleep(4)
             st.error("⚠️ **Cross-Domain Contamination: 50.0% (Personal media leaked)**")
