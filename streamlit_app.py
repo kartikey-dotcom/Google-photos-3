@@ -300,7 +300,7 @@ health_sections = [
                 "tag": "HBA1C: 7.2% (ELEVATED)",
                 "overlay1": "Substrate: Lab Report",
                 "overlay2": "Range: 4.0-5.6%",
-                "img": "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80",
+                "img": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80",
                 "verified": "Metropolis Healthcare Labs",
                 "bboxes": [{"type": "red", "text": "HbA1c: 7.2%", "top": "50%", "left": "30%"}],
                 "dialog": {"drug": "Diagnostic Blood Panel", "strength": "N/A", "prescriber": "Dr. Sarah Chen", "substrate": "A4 Print with Blue Seal", "batch": "SID: 8849201"}
@@ -507,7 +507,7 @@ elif selected_nav == "🧭 Explore":
     st.markdown("<h5 style='color:#5f6368; margin-top: 40px; margin-bottom: 16px;'>Things</h5>", unsafe_allow_html=True)
     things = {
         'https://images.unsplash.com/photo-1631549916768-4119b2e5f926': 'Prescriptions',
-        'https://images.unsplash.com/photo-1579684385127-1ef15d508118': 'Lab Reports',
+        'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d': 'Lab Reports',
         'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c': 'Receipts',
         'https://images.unsplash.com/photo-1504674900247-0877df9cc836': 'Food',
         'https://images.unsplash.com/photo-1519331379826-f10be5486c6f': 'Parks'
@@ -537,7 +537,7 @@ elif selected_nav == "👥 Sharing":
 elif selected_nav == "📚 Albums":
     st.markdown("<h3 style='color:#202124; margin-bottom: 24px;'>Albums</h3>", unsafe_allow_html=True)
     albums = {
-        '2024 Lab Reports': 'https://images.unsplash.com/photo-1579684385127-1ef15d508118',
+        '2024 Lab Reports': 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d',
         'Summer Vacation': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
         'Prescriptions': 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926',
         'Family': 'https://images.unsplash.com/photo-1511895426328-dc8714191300'
@@ -558,7 +558,7 @@ elif selected_nav == "📄 Documents":
     st.markdown("<h3 style='color:#202124; margin-bottom: 24px;'>Documents</h3>", unsafe_allow_html=True)
     st.markdown("<div style='display:flex; gap:16px; margin-bottom:24px;'><div style='padding:8px 16px; background:#e8f0fe; color:#1a73e8; border-radius:20px; font-weight:500; cursor:pointer;'>All</div><div style='padding:8px 16px; background:#f1f3f4; color:#5f6368; border-radius:20px; font-weight:500; cursor:pointer;'>Medical</div><div style='padding:8px 16px; background:#f1f3f4; color:#5f6368; border-radius:20px; font-weight:500; cursor:pointer;'>Receipts</div><div style='padding:8px 16px; background:#f1f3f4; color:#5f6368; border-radius:20px; font-weight:500; cursor:pointer;'>IDs</div></div>", unsafe_allow_html=True)
     docs = [
-        'https://images.unsplash.com/photo-1579684385127-1ef15d508118',
+        'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d',
         'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c',
         'https://images.unsplash.com/photo-1638202993928-7267aad84c31',
         'https://images.unsplash.com/photo-1505751172876-fa1923c5c528'
