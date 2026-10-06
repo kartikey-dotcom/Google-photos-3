@@ -21,6 +21,9 @@ def set_mode(mode):
         else:
             st.session_state.is_loading = False
 
+def go_to_health_cabinet():
+    st.session_state.nav_radio = "🏥 Health Cabinet"
+
 def handle_photos_search():
     query = st.session_state.photos_search_input
     if query:
@@ -392,7 +395,12 @@ if st.session_state.selected_card:
 
 # Rendering
 if selected_nav == "🖼️ Photos":
-    st.text_input("Search", key="photos_search_input", placeholder="🔍 Search your photos, albums, and health records...", label_visibility="collapsed", on_change=handle_photos_search)
+    col_search, col_btn = st.columns([7, 2])
+    with col_search:
+        st.text_input("Search", key="photos_search_input", placeholder="🔍 Search your photos, albums, and health records...", label_visibility="collapsed", on_change=handle_photos_search)
+    with col_btn:
+        st.button("🏥 Health Cabinet AI Lens", key="photos_hc_btn", on_click=go_to_health_cabinet, use_container_width=True)
+        
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("<h4 style='font-weight: 500; color:#202124;'>Timeline</h4>", unsafe_allow_html=True)
     cols = st.columns(4)
@@ -406,8 +414,17 @@ if selected_nav == "🖼️ Photos":
 
 elif selected_nav == "🏥 Health Cabinet":
     
-    # 1. Global Search Bar
-    st.text_input("Search", key="search_query_input", placeholder="🔍 Search your photos, albums, and health records...", label_visibility="collapsed")
+    # 1. Global Search Bar & Health Cabinet Button Side-by-Side
+    col_search, col_btn = st.columns([7, 2])
+    with col_search:
+        st.text_input("Search", key="search_query_input", placeholder="🔍 Search your photos, albums, and health records...", label_visibility="collapsed")
+        
+    with col_btn:
+        css = "toggle-active" if st.session_state.health_mode == "lens" else ""
+        st.markdown(f'<div class="{css}" style="display:flex; justify-content:flex-end; width:100%;">', unsafe_allow_html=True)
+        st.button("🏥 Health Cabinet AI Lens", key="hc_mode_btn", on_click=set_mode, args=("lens",), use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+        
     st.markdown("<br>", unsafe_allow_html=True)
     
     query = st.session_state.get('search_query', 'metformin')
@@ -418,17 +435,6 @@ elif selected_nav == "🏥 Health Cabinet":
         'receipt': 'Pharmacy Receipts'
     }
     display_query = query_map.get(query, query)
-    
-    # 2. Toggle Buttons Row (Directly below search bar)
-    col_query, col_mode2 = st.columns([7, 2])
-    with col_query:
-        st.empty()
-        
-    with col_mode2:
-        css = "toggle-active" if st.session_state.health_mode == "lens" else ""
-        st.markdown(f'<div class="{css}" style="display:flex; justify-content:flex-end;">', unsafe_allow_html=True)
-        st.button("🏥 Health Cabinet AI Lens", on_click=set_mode, args=("lens",), use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
         
     st.markdown("<br>", unsafe_allow_html=True)
     
