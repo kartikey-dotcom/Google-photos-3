@@ -269,7 +269,7 @@ health_sections = [
                 "tag": "METFORMIN 500MG ER",
                 "overlay1": "Substrate: Silver Foil",
                 "overlay2": "Lot: 4B391",
-                "img": "https://images.unsplash.com/photo-1584308666744-24d5e4708709?auto=format&fit=crop&w=800&q=80",
+                "img": "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?auto=format&fit=crop&w=800&q=80",
                 "verified": "Verified Salt: Metformin HCl",
                 "bboxes": [
                     {"type": "blue", "text": "METFORMIN 500MG ER", "top": "25%", "left": "15%"},
