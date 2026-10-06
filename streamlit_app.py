@@ -536,6 +536,7 @@ if selected_nav == "🖼️ Photos":
     col_search, col_btn = st.columns([7, 2])
     with col_search:
         st.text_input("Search", key="photos_search_input", placeholder="🔍 Search your photos, albums, and health records...", label_visibility="collapsed", on_change=handle_photos_search)
+        st.markdown('<div style="font-size: 13px; color: #5f6368; padding-top: 4px; padding-left: 16px;">Try searching: <i style="color:#1a73e8;">"blood work"</i>, <i style="color:#1a73e8;">"pharmacy bill"</i>, <i style="color:#1a73e8;">"metformin refill"</i>, <i style="color:#1a73e8;">"doctor script"</i></div>', unsafe_allow_html=True)
     with col_btn:
         st.button("🏥 Health Cabinet AI Lens", key="photos_hc_btn", on_click=go_to_health_cabinet, use_container_width=True)
         
@@ -556,6 +557,7 @@ elif selected_nav == "🏥 Health Cabinet":
     col_search, col_btn = st.columns([7, 2])
     with col_search:
         st.text_input("Search", key="search_query_input", placeholder="🔍 Search your photos, albums, and health records...", label_visibility="collapsed", on_change=handle_hc_search)
+        st.markdown('<div style="font-size: 13px; color: #5f6368; padding-top: 4px; padding-left: 16px;">Try searching: <i style="color:#1a73e8;">"blood work"</i>, <i style="color:#1a73e8;">"pharmacy bill"</i>, <i style="color:#1a73e8;">"metformin refill"</i>, <i style="color:#1a73e8;">"doctor script"</i></div>', unsafe_allow_html=True)
         
     with col_btn:
         css = "toggle-active" if st.session_state.health_mode == "lens" else ""
