@@ -21,6 +21,22 @@ def set_mode(mode):
         else:
             st.session_state.is_loading = False
 
+def handle_photos_search():
+    query = st.session_state.photos_search_input
+    if query:
+        st.session_state.nav_radio = "🏥 Health Cabinet"
+        q_lower = query.lower()
+        if "lab" in q_lower or "blood" in q_lower:
+            st.session_state.search_query = "lab"
+        elif "script" in q_lower or "rx" in q_lower or "doctor" in q_lower:
+            st.session_state.search_query = "script"
+        elif "receipt" in q_lower or "invoice" in q_lower or "pharmacy" in q_lower:
+            st.session_state.search_query = "receipt"
+        else:
+            st.session_state.search_query = "metformin"
+        
+        st.session_state.search_query_input = query
+
 def set_search(q, display_val):
     st.session_state.search_query = q
     st.session_state.search_query_input = display_val
@@ -239,7 +255,9 @@ with st.sidebar:
         "🏥 Health Cabinet",
         "🗑️ Trash"
     ]
-    selected_nav = st.radio("Navigation", menu_options, index=5, label_visibility="collapsed")
+    if "nav_radio" not in st.session_state:
+        st.session_state.nav_radio = "🏥 Health Cabinet"
+    selected_nav = st.radio("Navigation", menu_options, key="nav_radio", label_visibility="collapsed")
     
 
 
@@ -374,7 +392,7 @@ if st.session_state.selected_card:
 
 # Rendering
 if selected_nav == "🖼️ Photos":
-    st.markdown('<div style="background-color: #f1f3f4; border-radius: 24px; padding: 10px 16px; color: #9aa0a6; display: flex; align-items: center; gap: 8px;"><span style="font-size:18px;">🔍</span> Search your photos, albums, and health records</div>', unsafe_allow_html=True)
+    st.text_input("Search", key="photos_search_input", placeholder="🔍 Search your photos, albums, and health records...", label_visibility="collapsed", on_change=handle_photos_search)
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("<h4 style='font-weight: 500; color:#202124;'>Timeline</h4>", unsafe_allow_html=True)
     cols = st.columns(4)
