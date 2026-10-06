@@ -44,11 +44,9 @@ st.markdown("""
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"]:hover {
         background-color: #f1f3f4 !important;
     }
-    /* Hide the circular radio indicator */
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] > div:first-child {
         display: none !important;
     }
-    /* Style for Active/Checked item */
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] {
         background-color: #e8f0fe !important;
     }
@@ -57,24 +55,44 @@ st.markdown("""
         font-weight: 600 !important;
     }
     
-    /* Top Bar Search */
-    .top-bar {
-        display: flex;
-        align-items: center;
-        padding: 10px 24px;
-        border-bottom: 1px solid var(--border);
-        margin-top: -60px;
-        margin-bottom: 20px;
-    }
-    .search-box {
+    /* Search Bar Styling */
+    [data-testid="stTextInput"] div[data-baseweb="input"] {
         background-color: #f1f3f4;
-        border-radius: 8px;
-        padding: 10px 20px;
-        width: 60%;
-        display: flex;
-        align-items: center;
-        color: var(--text-main);
-        margin: 0 auto;
+        border-radius: 24px;
+        border: 1px solid transparent;
+        padding: 4px 12px;
+        transition: background-color 0.2s, box-shadow 0.2s;
+    }
+    [data-testid="stTextInput"] div[data-baseweb="input"]:focus-within {
+        background-color: #ffffff;
+        box-shadow: 0 1px 1px 0 rgba(65,69,73,0.3),0 1px 3px 1px rgba(65,69,73,0.15);
+    }
+    
+    /* Main Area Horizontal Radio Toggle */
+    .main-toggle [data-testid="stRadio"] > div {
+        display: inline-flex;
+        background-color: #f1f3f4;
+        border-radius: 24px;
+        padding: 4px;
+        gap: 0px;
+        border: 1px solid var(--border);
+    }
+    .main-toggle [data-testid="stRadio"] label[data-baseweb="radio"] {
+        padding: 8px 16px !important;
+        border-radius: 20px !important;
+        margin: 0 !important;
+        cursor: pointer;
+        color: var(--text-muted) !important;
+    }
+    .main-toggle [data-testid="stRadio"] label[data-baseweb="radio"] > div:first-child {
+        display: none !important;
+    }
+    .main-toggle [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] {
+        background-color: #e8f0fe !important;
+    }
+    .main-toggle [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] p {
+        color: var(--accent) !important;
+        font-weight: 600 !important;
     }
     
     /* Filter Chips */
@@ -195,7 +213,6 @@ with st.sidebar:
     st.markdown("### 💠 Google Photos <span style='background:#f1f3f4; color:#5f6368; padding:2px 6px; border-radius:4px; font-size:10px; border:1px solid #dadce0;'>Labs</span>", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Interactive menu mapped to radio buttons
     menu_options = [
         "🖼️ Photos",
         "🧭 Explore",
@@ -206,7 +223,6 @@ with st.sidebar:
         "🗑️ Trash"
     ]
     
-    # Default to Evidence Partition
     selected_nav = st.radio("Navigation", menu_options, index=5, label_visibility="collapsed")
     
     st.markdown("<br><br><br><br><br><br><br><br><br>", unsafe_allow_html=True)
@@ -224,15 +240,14 @@ with st.sidebar:
 
 # Handle UI based on Interactive Selection
 if selected_nav == "📁 Evidence Partition":
-    # 2. TOP BAR
-    st.markdown("""
-    <div class="top-bar">
-        <div class="search-box">
-            🔍 LOT-GR-408 / SL-14
-            <span style="margin-left: auto; background-color: #fef7e0; color: #b06000; padding: 4px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #fbbc04; font-weight: 600;">✨ Evidence Lens: Active</span>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    # 2. INTERACTIVE TOP BAR SEARCH
+    col1, col2 = st.columns([5, 1])
+    with col1:
+        search_query = st.text_input("Search", value="", placeholder="🔍 e.g. LOT-GR-408 / SL-14 or STATUARIO", label_visibility="collapsed")
+    with col2:
+        st.markdown('<div style="background-color: #fef7e0; color: #b06000; padding: 6px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #fbbc04; font-weight: 600; text-align: center; margin-top: 2px;">✨ Evidence Lens: Active</div>', unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
     
     # 3. FILTERS & METRICS
     st.markdown("""
@@ -246,93 +261,109 @@ if selected_nav == "📁 Evidence Partition":
         <div class="chip">⚡ 18ms latency</div>
         <div class="chip">🛡️ Clean Verification</div>
     </div>
-    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #dadce0; padding-bottom: 15px;">
-        <div>
-            <span style="background-color: #f1f3f4; color: #5f6368; padding: 8px 16px; border-radius: 16px 0 0 16px; border: 1px solid #dadce0; border-right: none; font-size: 13px;">🕘 Photos Legacy Mode</span><span style="background-color: #e8f0fe; color: #1a73e8; font-weight:600; padding: 8px 16px; border-radius: 0 16px 16px 0; border: 1px solid #8ab4f8; font-size: 13px;">✨ Evidence Lens Lab (Active)</span>
-        </div>
-        <div style="font-size: 12px; color: #5f6368;">
-            🔵 24 family photos from Himachal quarantined • 4 physical evidence assets verified
-        </div>
-    </div>
     """, unsafe_allow_html=True)
     
-    # 4. MAIN GALLERY
-    st.markdown("<h4 style='font-weight: 500; color:#202124;'>Today • Sunday, Jun 2, 2024 <span style='font-size:12px; background:#f1f3f4; padding:4px 10px; border-radius:12px; margin-left:10px; color:#5f6368; border: 1px solid #dadce0;'>Nagarjuna Sagar Field Site</span></h4>", unsafe_allow_html=True)
+    st.markdown("<hr style='margin: 10px 0;'>", unsafe_allow_html=True)
     
-    cards = [
-        {
-            "title": "LOT-GR-408 / SL-14 B-28",
-            "subtitle": "Rough Natural Travertine • 11:24 AM IST",
-            "tag": "TARGET",
-            "overlay1": "300mm Scale",
-            "overlay2": "Verified Match",
-            "img": "https://images.unsplash.com/photo-1618367588411-d9a90fefa880?auto=format&fit=crop&q=80&w=400&h=200",
-            "action": "👁️ Inspector Lightbox",
-            "primary": True,
-            "score": "Parity 1.0"
-        },
-        {
-            "title": "STATUARIO-LOT-09",
-            "subtitle": "Polished Calacatta Bundle • May 28, 2024",
-            "tag": "REFERENCE",
-            "overlay1": "Polished Slab",
-            "overlay2": "Non-target",
-            "img": "https://images.unsplash.com/photo-1588805214470-381a1795db2c?auto=format&fit=crop&q=80&w=400&h=200",
-            "action": "↗️ Differential",
-            "primary": False,
-            "score": "Non-match"
-        },
-        {
-            "title": "BLK-99 // SECT-04",
-            "subtitle": "Quarried Black Granite • Jun 2, 2024",
-            "tag": "QUARRY",
-            "overlay1": "Granite",
-            "overlay2": "Negative",
-            "img": "https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?auto=format&fit=crop&q=80&w=400&h=200",
-            "action": "📄 View Site Log",
-            "primary": False,
-            "score": "Negative"
-        },
-        {
-            "title": "BALAJI-CHALLAN-49102",
-            "subtitle": "Delivery Memo • 11:15 AM IST",
-            "tag": "DOCUMENT",
-            "overlay1": "Fiscal",
-            "overlay2": "Challan",
-            "img": "https://images.unsplash.com/photo-1618424181497-157f25b6ce7e?auto=format&fit=crop&q=80&w=400&h=200",
-            "action": "🔍 Cross-Ref Challan",
-            "primary": False,
-            "score": "Indexed"
-        }
-    ]
+    col_toggle, col_stats = st.columns([2, 1])
+    with col_toggle:
+        st.markdown('<div class="main-toggle">', unsafe_allow_html=True)
+        view_mode = st.radio("Mode", ["🕘 Photos Legacy Mode", "✨ Evidence Lens Lab (Active)"], index=1, horizontal=True, label_visibility="collapsed")
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+    with col_stats:
+        st.markdown('<div style="font-size: 12px; color: #5f6368; text-align: right; padding-top: 10px;">🔵 24 family photos quarantined • 4 evidence assets verified</div>', unsafe_allow_html=True)
     
-    cols = st.columns(4)
+    st.markdown("<hr style='margin: 10px 0 20px 0;'>", unsafe_allow_html=True)
     
-    for i, c in enumerate(cards):
-        with cols[i]:
-            action_class = "card-action primary" if c["primary"] else "card-action"
+    if view_mode == "✨ Evidence Lens Lab (Active)":
+        # 4. MAIN GALLERY (Interactive)
+        st.markdown("<h4 style='font-weight: 500; color:#202124;'>Today • Sunday, Jun 2, 2024 <span style='font-size:12px; background:#f1f3f4; padding:4px 10px; border-radius:12px; margin-left:10px; color:#5f6368; border: 1px solid #dadce0;'>Nagarjuna Sagar Field Site</span></h4>", unsafe_allow_html=True)
+        
+        all_cards = [
+            {
+                "title": "LOT-GR-408 / SL-14 B-28",
+                "subtitle": "Rough Natural Travertine • 11:24 AM IST",
+                "tag": "TARGET",
+                "overlay1": "300mm Scale",
+                "overlay2": "Verified Match",
+                "img": "https://images.unsplash.com/photo-1618367588411-d9a90fefa880?auto=format&fit=crop&q=80&w=400&h=200",
+                "action": "👁️ Inspector Lightbox",
+                "primary": True,
+                "score": "Parity 1.0"
+            },
+            {
+                "title": "STATUARIO-LOT-09",
+                "subtitle": "Polished Calacatta Bundle • May 28, 2024",
+                "tag": "REFERENCE",
+                "overlay1": "Polished Slab",
+                "overlay2": "Non-target",
+                "img": "https://images.unsplash.com/photo-1588805214470-381a1795db2c?auto=format&fit=crop&q=80&w=400&h=200",
+                "action": "↗️ Differential",
+                "primary": False,
+                "score": "Non-match"
+            },
+            {
+                "title": "BLK-99 // SECT-04",
+                "subtitle": "Quarried Black Granite • Jun 2, 2024",
+                "tag": "QUARRY",
+                "overlay1": "Granite",
+                "overlay2": "Negative",
+                "img": "https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?auto=format&fit=crop&q=80&w=400&h=200",
+                "action": "📄 View Site Log",
+                "primary": False,
+                "score": "Negative"
+            },
+            {
+                "title": "BALAJI-CHALLAN-49102",
+                "subtitle": "Delivery Memo • 11:15 AM IST",
+                "tag": "DOCUMENT",
+                "overlay1": "Fiscal",
+                "overlay2": "Challan",
+                "img": "https://images.unsplash.com/photo-1618424181497-157f25b6ce7e?auto=format&fit=crop&q=80&w=400&h=200",
+                "action": "🔍 Cross-Ref Challan",
+                "primary": False,
+                "score": "Indexed"
+            }
+        ]
+        
+        # Interactive Filtering Logic
+        if search_query:
+            filtered_cards = [c for c in all_cards if search_query.lower() in c["title"].lower() or search_query.lower() in c["tag"].lower()]
+        else:
+            filtered_cards = all_cards
             
-            html = f"""
-            <div class="evidence-card">
-                <div class="card-img-container">
-                    <img src="{c['img']}">
-                    <div class="card-tag">{c['tag']}</div>
-                    <div class="card-overlay">
-                        <div class="overlay-pill">{c['overlay1']}</div>
-                        <div class="overlay-pill" style="color:#1a73e8; border-color:#8ab4f8;">{c['overlay2']}</div>
+        if not filtered_cards:
+            st.info(f"No evidence assets found matching '{search_query}'. Try 'LOT-GR-408' or 'DOCUMENT'.")
+        else:
+            cols = st.columns(4)
+            for i, c in enumerate(filtered_cards):
+                with cols[i % 4]:
+                    action_class = "card-action primary" if c["primary"] else "card-action"
+                    
+                    html = f"""
+                    <div class="evidence-card">
+                        <div class="card-img-container">
+                            <img src="{c['img']}">
+                            <div class="card-tag">{c['tag']}</div>
+                            <div class="card-overlay">
+                                <div class="overlay-pill">{c['overlay1']}</div>
+                                <div class="overlay-pill" style="color:#1a73e8; border-color:#8ab4f8;">{c['overlay2']}</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">
+                                <span>{c['title']}</span>
+                                <span style="font-size:10px; background:#e8f0fe; color:#1a73e8; padding:2px 6px; border-radius:4px; font-weight:700;">{c['score']}</span>
+                            </div>
+                            <div class="card-subtitle">{c['subtitle']}</div>
+                            <div class="{action_class}">{c['action']}</div>
+                        </div>
                     </div>
-                </div>
-                <div class="card-content">
-                    <div class="card-title">
-                        <span>{c['title']}</span>
-                        <span style="font-size:10px; background:#e8f0fe; color:#1a73e8; padding:2px 6px; border-radius:4px; font-weight:700;">{c['score']}</span>
-                    </div>
-                    <div class="card-subtitle">{c['subtitle']}</div>
-                    <div class="{action_class}">{c['action']}</div>
-                </div>
-            </div>
-            """
-            st.markdown(html, unsafe_allow_html=True)
+                    """
+                    st.markdown(html, unsafe_allow_html=True)
+    else:
+        st.warning("⚠️ Legacy Mode active. Professional indexing disabled. 14 minutes estimated to find assets manually.")
 else:
     st.info(f"You selected **{selected_nav}**. This section is not part of the Evidence Lens MVP.")
 
