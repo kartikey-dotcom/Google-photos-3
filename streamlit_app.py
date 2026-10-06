@@ -316,11 +316,11 @@ family_photos = [
 
 health_sections = [
     {
-        "date_header": "October 2024 • Recent Clinical Records & Prescriptions",
+        "date_header": "October 2026 • Recent Clinical Records & Prescriptions",
         "cards": [
             {
                 "title": "Metformin HCl 500mg",
-                "subtitle": "Oct 28, 2024 • Apollo Pharmacy Dispense",
+                "subtitle": "Oct 28, 2026 • Apollo Pharmacy Dispense",
                 "tag": "METFORMIN 500MG ER",
                 "overlay1": "Substrate: Silver Foil",
                 "overlay2": "Lot: 4B391",
@@ -328,19 +328,19 @@ health_sections = [
                 "verified": "Verified Salt: Metformin HCl",
                 "bboxes": [
                     {"type": "blue", "text": "METFORMIN 500MG ER", "top": "25%", "left": "15%"},
-                    {"type": "red", "text": "Exp: 11/2025", "bottom": "20%", "right": "10%"}
+                    {"type": "red", "text": "Exp: 11/2027", "bottom": "20%", "right": "10%"}
                 ],
                 "dialog": {
                     "drug": "Metformin Hydrochloride Extended Release",
                     "strength": "500mg",
                     "prescriber": "Apollo Pharmacy Dispense (Dr. R. Mehta)",
                     "substrate": "Specular Metallic Blister Pack",
-                    "batch": "4B391 • Exp: 11/2025"
+                    "batch": "4B391 • Exp: 11/2027"
                 }
             },
             {
                 "title": "Hypertension Rx (Telmisartan)",
-                "subtitle": "Oct 14, 2024 • Dr. A. R. Khan (Cardiology)",
+                "subtitle": "Oct 14, 2026 • Dr. A. R. Khan (Cardiology)",
                 "tag": "TELMISARTAN 40MG",
                 "overlay1": "Substrate: Doctor Script",
                 "overlay2": "1 Tab Daily OD",
@@ -351,7 +351,7 @@ health_sections = [
             },
             {
                 "title": "Metabolic & HbA1c Panel",
-                "subtitle": "Oct 26, 2024 • Metropolis Healthcare Labs",
+                "subtitle": "Oct 26, 2026 • Metropolis Healthcare Labs",
                 "tag": "HBA1C: 7.2% (ELEVATED)",
                 "overlay1": "Substrate: Lab Report",
                 "overlay2": "Range: 4.0-5.6%",
@@ -362,7 +362,7 @@ health_sections = [
             },
             {
                 "title": "Pharmacy Register Receipt",
-                "subtitle": "Oct 16, 2024 • Total $65.03 Paid",
+                "subtitle": "Oct 16, 2026 • Total $65.03 Paid",
                 "tag": "CITY DRUG PHARMACY",
                 "overlay1": "Substrate: Thermal Paper",
                 "overlay2": "4 Meds Listed",
@@ -374,11 +374,11 @@ health_sections = [
         ]
     },
     {
-        "date_header": "August 2024 • Diagnostic Panel & Annual Checkup",
+        "date_header": "August 2026 • Diagnostic Panel & Annual Checkup",
         "cards": [
             {
                 "title": "CBC Complete Blood Count",
-                "subtitle": "Aug 12, 2024 • City Lab Services",
+                "subtitle": "Aug 12, 2026 • City Lab Services",
                 "tag": "WBC: 6.8 K/uL",
                 "overlay1": "Substrate: Lab Report",
                 "overlay2": "Normal Range",
@@ -389,7 +389,7 @@ health_sections = [
             },
             {
                 "title": "Thyroid Profile (TSH)",
-                "subtitle": "Aug 12, 2024 • City Lab Services",
+                "subtitle": "Aug 12, 2026 • City Lab Services",
                 "tag": "TSH: 2.1 mIU/L",
                 "overlay1": "Substrate: Lab Report",
                 "overlay2": "Euthyroid",
@@ -400,7 +400,7 @@ health_sections = [
             },
             {
                 "title": "Cardiologist Follow-up Note",
-                "subtitle": "Aug 05, 2024 • Dr. A. R. Khan",
+                "subtitle": "Aug 05, 2026 • Dr. A. R. Khan",
                 "tag": "BP: 120/80",
                 "overlay1": "Substrate: Doctor Script",
                 "overlay2": "Stable",
@@ -411,7 +411,7 @@ health_sections = [
             },
             {
                 "title": "Influenza Vaccination Record",
-                "subtitle": "Aug 01, 2024 • Apex Clinic",
+                "subtitle": "Aug 01, 2026 • Apex Clinic",
                 "tag": "FLUZONE QUAD",
                 "overlay1": "Substrate: Cardstock",
                 "overlay2": "Administered",
@@ -423,11 +423,11 @@ health_sections = [
         ]
     },
     {
-        "date_header": "May 2024 • Dental Surgery & Recovery",
+        "date_header": "May 2026 • Dental Surgery & Recovery",
         "cards": [
             {
                 "title": "Amoxicillin Rx 500mg",
-                "subtitle": "May 20, 2024 • Dr. P. Smith",
+                "subtitle": "May 20, 2026 • Dr. P. Smith",
                 "tag": "AMOXICILLIN 500MG",
                 "overlay1": "Substrate: Doctor Script",
                 "overlay2": "1 Tab TID",
@@ -438,7 +438,7 @@ health_sections = [
             },
             {
                 "title": "Dental X-Ray Lab Panel",
-                "subtitle": "May 19, 2024 • Smile Imaging",
+                "subtitle": "May 19, 2026 • Smile Imaging",
                 "tag": "PANORAMIC",
                 "overlay1": "Substrate: X-Ray Film",
                 "overlay2": "Clear",
@@ -449,7 +449,7 @@ health_sections = [
             },
             {
                 "title": "Ibuprofen Rx 800mg",
-                "subtitle": "May 19, 2024 • Dr. P. Smith",
+                "subtitle": "May 19, 2026 • Dr. P. Smith",
                 "tag": "IBUPROFEN",
                 "overlay1": "Substrate: Doctor Script",
                 "overlay2": "PRN Pain",
@@ -460,7 +460,7 @@ health_sections = [
             },
             {
                 "title": "Dental Surgery Invoice",
-                "subtitle": "May 19, 2024 • Total $450 Paid",
+                "subtitle": "May 19, 2026 • Total $450 Paid",
                 "tag": "SMILE CLINIC",
                 "overlay1": "Substrate: Thermal Receipt",
                 "overlay2": "Paid in Full",
@@ -472,11 +472,11 @@ health_sections = [
         ]
     },
     {
-        "date_header": "January 2024 • Urgent Care Visit",
+        "date_header": "January 2026 • Urgent Care Visit",
         "cards": [
             {
                 "title": "Urgent Care Invoice",
-                "subtitle": "Jan 10, 2024 • Total $150 Paid",
+                "subtitle": "Jan 10, 2026 • Total $150 Paid",
                 "tag": "CITY MED",
                 "overlay1": "Substrate: Thermal Receipt",
                 "overlay2": "Copay",
@@ -487,18 +487,18 @@ health_sections = [
             },
             {
                 "title": "Metformin ER 500mg Refill",
-                "subtitle": "Jan 10, 2024 • Express Pharmacy",
+                "subtitle": "Jan 10, 2026 • Express Pharmacy",
                 "tag": "METFORMIN 500MG",
                 "overlay1": "Substrate: Silver Foil",
                 "overlay2": "Lot: 1A22",
                 "img": "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?auto=format&fit=crop&w=800&q=80",
                 "verified": "Verified Salt: Metformin HCl",
                 "bboxes": [{"type": "blue", "text": "METFORMIN 500MG", "top": "35%", "left": "25%"}],
-                "dialog": {"drug": "Metformin Extended Release", "strength": "500mg", "prescriber": "City Med", "substrate": "Foil Pack", "batch": "1A22 • Exp: 05/2025"}
+                "dialog": {"drug": "Metformin Extended Release", "strength": "500mg", "prescriber": "City Med", "substrate": "Foil Pack", "batch": "1A22 • Exp: 05/2027"}
             },
             {
                 "title": "Metabolic Lab Panel",
-                "subtitle": "Jan 09, 2024 • City Med Lab",
+                "subtitle": "Jan 09, 2026 • City Med Lab",
                 "tag": "GLUCOSE: 105",
                 "overlay1": "Substrate: Lab Report",
                 "overlay2": "Fasting",
@@ -509,7 +509,7 @@ health_sections = [
             },
             {
                 "title": "Azithromycin Rx Script",
-                "subtitle": "Jan 10, 2024 • City Med",
+                "subtitle": "Jan 10, 2026 • City Med",
                 "tag": "AZITHROMYCIN",
                 "overlay1": "Substrate: Doctor Script",
                 "overlay2": "Z-Pak",
@@ -733,7 +733,7 @@ elif selected_nav == "👥 Sharing":
 elif selected_nav == "📚 Albums":
     st.markdown("<h3 style='color:#202124; margin-bottom: 24px;'>Albums</h3>", unsafe_allow_html=True)
     albums = {
-        '2024 Lab Reports': 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d',
+        '2026 Lab Reports': 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d',
         'Summer Vacation': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
         'Prescriptions': 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926',
         'Family': 'https://images.unsplash.com/photo-1511895426328-dc8714191300'
