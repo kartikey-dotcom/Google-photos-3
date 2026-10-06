@@ -1,27 +1,67 @@
 import streamlit as st
 import time
 
-st.set_page_config(layout="wide", page_title="Google Photos", initial_sidebar_state="expanded")
+st.set_page_config(layout="wide", page_title="Google Photos - Health Cabinet", initial_sidebar_state="expanded")
 
-# Initialize session state for search
+# Initialize state
 if "search_query" not in st.session_state:
-    st.session_state.search_query = ""
+    st.session_state.search_query = "Metformin 500mg"
+if "health_mode" not in st.session_state:
+    st.session_state.health_mode = "lens" # "lens" or "legacy"
+if "is_loading" not in st.session_state:
+    st.session_state.is_loading = False
+if "selected_card" not in st.session_state:
+    st.session_state.selected_card = None
 
-def set_search(query):
-    st.session_state.search_query = query
+def set_mode(mode):
+    if st.session_state.health_mode != mode:
+        st.session_state.health_mode = mode
+        if mode == "legacy":
+            st.session_state.is_loading = True
+        else:
+            st.session_state.is_loading = False
 
-# Inject Custom CSS to override Streamlit's default styling
+def set_search(q):
+    st.session_state.search_query = q
+
+def open_lightbox(card_title):
+    st.session_state.selected_card = card_title
+
+@st.dialog("Clinical Info Panel", width="large")
+def show_lightbox(c):
+    cols = st.columns([2, 1])
+    with cols[0]:
+        st.image(c['img'], use_column_width=True)
+    with cols[1]:
+        if 'dialog' in c:
+            d = c['dialog']
+            st.markdown(f"### {d['drug']}")
+            st.markdown(f"**Strength:** {d['strength']}")
+            st.markdown(f"**Prescribed By:** {d['prescriber']}")
+            st.markdown(f"**Extraction Substrate:** {d['substrate']}")
+            st.markdown(f"**Detected Batch:** {d['batch']}")
+            st.markdown("---")
+            st.info("Verified by Health Cabinet AI Lens")
+
+# Simulate Latency on state change
+if st.session_state.is_loading:
+    with st.spinner("Searching your photos, documents, and memories..."):
+        time.sleep(4.0)
+    st.session_state.is_loading = False
+
+# Inject Custom CSS (Dark Theme MD3)
 st.markdown("""
 <style>
-    /* Global Light Theme Settings */
+    /* Global Dark Theme Settings */
     :root {
-        --bg-color: #ffffff;
-        --sidebar-bg: #ffffff;
-        --text-main: #202124;
-        --text-muted: #5f6368;
-        --accent: #1a73e8;
-        --border: #dadce0;
-        --card-bg: #ffffff;
+        --bg-color: #202124;
+        --sidebar-bg: #202124;
+        --text-main: #e8eaed;
+        --text-muted: #9aa0a6;
+        --accent: #8ab4f8;
+        --border: #3c4043;
+        --card-bg: #303134;
+        --hover-bg: #3c4043;
     }
     
     .stApp {
@@ -32,87 +72,69 @@ st.markdown("""
     
     header {visibility: hidden;}
     
+    /* Sidebar */
     [data-testid="stSidebar"] {
         background-color: var(--sidebar-bg) !important;
         border-right: 1px solid var(--border);
     }
-    
-    /* Interactive Sidebar Menu */
-    [data-testid="stSidebar"] [data-testid="stRadio"] > div {
-        gap: 2px;
-    }
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] {
-        padding: 8px 16px 8px 16px !important;
+        padding: 8px 16px !important;
         border-radius: 0 20px 20px 0 !important;
         margin-left: -1rem !important;
         margin-right: 1rem !important;
         cursor: pointer;
         transition: background-color 0.2s ease;
+        color: var(--text-main) !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"]:hover {
-        background-color: #f1f3f4 !important;
+        background-color: var(--hover-bg) !important;
     }
+    /* Highlight for Health Cabinet */
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] {
-        background-color: #e8f0fe !important;
+        background-color: #394457 !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] p {
-        color: var(--accent) !important;
+        color: #d2e3fc !important;
         font-weight: 600 !important;
     }
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] > div:nth-child(1) { display: none !important; }
     
-    /* Hide Radio Circles in Sidebar */
-    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] > div:first-child {
-        display: none !important;
-    }
-    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] > div:nth-child(1) {
-        display: none !important;
-    }
-    
-    /* Search Bar Styling */
+    /* Inputs & Buttons */
     [data-testid="stTextInput"] div[data-baseweb="input"] {
-        background-color: #f1f3f4;
+        background-color: #303134;
         border-radius: 24px;
         border: 1px solid transparent;
-        padding: 4px 12px;
-        transition: background-color 0.2s, box-shadow 0.2s;
+        color: var(--text-main);
     }
-    [data-testid="stTextInput"] div[data-baseweb="input"]:focus-within {
-        background-color: #ffffff;
-        box-shadow: 0 1px 1px 0 rgba(65,69,73,0.3),0 1px 3px 1px rgba(65,69,73,0.15);
-    }
-    
-    /* Suggestion Chips (Overrides default stButton) */
     [data-testid="stButton"] button {
         border-radius: 16px !important;
         padding: 4px 16px !important;
-        background-color: #ffffff !important;
-        border: 1px solid #dadce0 !important;
-        color: #5f6368 !important;
+        background-color: #303134 !important;
+        border: 1px solid var(--border) !important;
+        color: var(--text-muted) !important;
         font-size: 13px !important;
-        min-height: 32px !important;
-        height: 32px !important;
-        line-height: 1 !important;
-        margin-top: -10px !important;
         transition: all 0.2s;
     }
     [data-testid="stButton"] button:hover {
-        background-color: #f1f3f4 !important;
-        color: #202124 !important;
-        border-color: #bdc1c6 !important;
+        background-color: var(--hover-bg) !important;
+        color: var(--text-main) !important;
     }
     
-    /* Evidence Cards */
+    /* Active Toggle Button */
+    .toggle-active > button {
+        background-color: #394457 !important;
+        border-color: #8ab4f8 !important;
+        color: #d2e3fc !important;
+    }
+    
+    /* Cards */
     .evidence-card {
         background-color: var(--card-bg);
         border-radius: 12px;
         border: 1px solid var(--border);
         overflow: hidden;
         margin-bottom: 20px;
-        transition: transform 0.2s;
-    }
-    .evidence-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        position: relative;
     }
     .card-img-container {
         position: relative;
@@ -121,20 +143,6 @@ st.markdown("""
         background-color: #000;
     }
     .card-img-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    /* Legacy Image Grid Container for Sidebar Features */
-    .legacy-img-container {
-        width: 100%;
-        aspect-ratio: 1;
-        overflow: hidden;
-        margin-bottom: 15px;
-        border-radius: 8px;
-    }
-    .legacy-img-container img {
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -149,33 +157,43 @@ st.markdown("""
         border-radius: 2px;
         text-shadow: 0px 0px 2px rgba(0,0,0,0.8);
     }
-    .bbox.red {
-        border: 2px solid #ea4335;
-        color: #ea4335;
-        background-color: rgba(234, 67, 53, 0.15);
+    .bbox.red { border: 2px solid #f28b82; color: #f28b82; background-color: rgba(242, 139, 130, 0.15); }
+    .bbox.yellow { border: 2px solid #fde293; color: #fde293; background-color: rgba(253, 226, 147, 0.15); }
+    .bbox.blue { border: 2px solid #aecbfa; color: #aecbfa; background-color: rgba(174, 203, 250, 0.15); }
+    
+    /* Hover Actions (Checkmark and Star) */
+    .card-hover-actions {
+        position: absolute;
+        top: 10px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 10px;
+        opacity: 0.8;
     }
-    .bbox.yellow {
-        border: 2px solid #fbbc04;
-        color: #fbbc04;
-        background-color: rgba(251, 188, 4, 0.15);
-    }
-    .bbox.blue {
-        border: 2px solid #4285f4;
-        color: #4285f4;
-        background-color: rgba(66, 133, 244, 0.15);
+    .hover-icon {
+        background: rgba(0,0,0,0.6);
+        color: white;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        border: 1px solid rgba(255,255,255,0.3);
     }
     
     .card-tag {
         position: absolute;
-        top: 10px;
-        right: 10px;
-        background-color: rgba(255,255,255,0.9);
-        color: #202124;
-        padding: 2px 8px;
-        border-radius: 4px;
+        top: 40px;
+        left: 10px;
+        background-color: rgba(32,33,36,0.9);
+        color: #e8eaed;
+        padding: 4px 8px;
+        border-radius: 12px;
         font-size: 10px;
         font-weight: 700;
-        text-transform: uppercase;
         border: 1px solid var(--border);
     }
     .card-overlay {
@@ -186,58 +204,29 @@ st.markdown("""
         gap: 8px;
     }
     .overlay-pill {
-        background-color: rgba(255,255,255,0.9);
-        color: #202124;
+        background-color: rgba(32,33,36,0.9);
+        color: #e8eaed;
         padding: 4px 10px;
         border-radius: 12px;
         font-size: 11px;
-        font-weight: 600;
+        font-weight: 500;
         border: 1px solid var(--border);
     }
     
-    .card-content {
-        padding: 16px;
-    }
-    .card-title {
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 4px;
-        color: var(--text-main);
-        display: flex;
-        justify-content: space-between;
-    }
-    .card-subtitle {
-        font-size: 12px;
-        color: var(--text-muted);
-        margin-bottom: 16px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    .card-action {
-        width: 100%;
-        background-color: transparent;
-        border: 1px solid var(--border);
-        color: var(--accent);
-        padding: 8px;
-        border-radius: 20px;
-        text-align: center;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-    .card-action.primary {
-        background-color: var(--accent);
-        color: #ffffff;
-        border-color: var(--accent);
-    }
+    .card-content { padding: 16px; }
+    .card-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; color: var(--text-main); }
+    .card-subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+    .verified-pill { font-size: 11px; color: var(--accent); background: rgba(138,180,248,0.1); padding: 4px 8px; border-radius: 12px; display: inline-block; }
     
+    /* Legacy Simple Grid */
+    .legacy-img-container { width: 100%; aspect-ratio: 16/9; overflow: hidden; margin-bottom: 20px; border-radius: 12px; }
+    .legacy-img-container img { width: 100%; height: 100%; object-fit: cover; }
 </style>
 """, unsafe_allow_html=True)
 
-# 1. Interactive SIDEBAR Navigation
+# 1. SIDEBAR Navigation
 with st.sidebar:
-    st.markdown("### 💠 Google Photos <span style='background:#f1f3f4; color:#5f6368; padding:2px 6px; border-radius:4px; font-size:10px; border:1px solid #dadce0;'>Labs</span>", unsafe_allow_html=True)
+    st.markdown("### 💠 Photos <span style='background:#303134; color:#9aa0a6; padding:2px 6px; border-radius:4px; font-size:10px;'>Labs</span>", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
     
     menu_options = [
@@ -246,27 +235,21 @@ with st.sidebar:
         "👥 Sharing",
         "📚 Albums",
         "📄 Documents",
-        "📁 Evidence Partition",
+        "🏥 Health Cabinet",
         "🗑️ Trash"
     ]
+    selected_nav = st.radio("Navigation", menu_options, index=5, label_visibility="collapsed")
     
-    selected_nav = st.radio("Navigation", menu_options, index=0, label_visibility="collapsed")
-    
-    st.markdown("<br><br><br><br><br><br><br><br><br>", unsafe_allow_html=True)
+    st.markdown("<br><br><br><br><br>", unsafe_allow_html=True)
     st.markdown("""
-    <div style="background-color: #f1f3f4; padding: 16px; border-radius: 12px; font-size: 12px; border: 1px solid #dadce0;">
-        ☁️ <b style="color: #202124;">Storage Vault</b><br>
-        <span style="color:#5f6368;">1.4 TB of 2 TB used</span><br>
-        <div style="width:100%; height:4px; background:#dadce0; margin-top:8px; border-radius:2px;">
-            <div style="width:70%; height:100%; background:#1a73e8; border-radius:2px;"></div>
-        </div>
-        <br>
-        <span style="color:#1a73e8; font-weight:600;">Get more storage</span>
+    <div style="padding: 16px; border-radius: 12px; font-size: 12px; border: 1px solid #3c4043;">
+        <span style="color:#e8eaed; font-weight: 600;">👥 Caregiver Sharing</span><br>
+        <span style="color:#9aa0a6;">Dr. Sarah Chen, Mark D.</span><br>
+        <div style="margin-top: 8px; color:#8ab4f8; cursor:pointer;">Manage Access</div>
     </div>
     """, unsafe_allow_html=True)
 
-
-# Core Data
+# Data
 family_photos = [
     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=400&q=80",
@@ -276,358 +259,220 @@ family_photos = [
     "https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?auto=format&fit=crop&w=400&q=80",
 ]
 
-document_photos = [
-    "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1586282391129-76a6df230234?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&w=400&q=80",
-]
-
-explore_faces = [
-    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80",
-]
-
-explore_places = [
-    "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80",
-]
-
-sections = [
+health_sections = [
     {
-        "date_header": "Today • Sunday, Jun 2, 2024",
-        "location": "Nagarjuna Sagar Field Site",
+        "date_header": "October 2024 • Recent Clinical Records & Prescriptions",
         "cards": [
             {
-                "title": "LOT-GR-408 / SL-14 B-28",
-                "subtitle": "Rough Natural Travertine • 11:24 AM IST",
-                "tag": "TARGET",
-                "overlay1": "300mm Scale",
-                "overlay2": "Verified Match",
-                "img": "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=800&q=80",
-                "action": "👁️ Inspector Lightbox",
-                "primary": True,
-                "score": "Parity 1.0",
-                "keywords": ["stone", "slab", "travertine", "rock", "yard", "marble", "rough", "construction", "material"],
+                "title": "Metformin HCl 500mg",
+                "subtitle": "Oct 28, 2024 • Apollo Pharmacy Dispense",
+                "tag": "METFORMIN 500MG ER",
+                "overlay1": "Substrate: Silver Foil",
+                "overlay2": "Lot: 4B391",
+                "img": "https://images.unsplash.com/photo-1584308666744-24d5e4708709?auto=format&fit=crop&w=800&q=80",
+                "verified": "Verified Salt: Metformin HCl",
                 "bboxes": [
-                    {"type": "red", "text": "LOT-GR-408 / SL-14 B-28", "top": "15%", "right": "5%"},
-                    {"type": "yellow", "text": "300mm Scale", "bottom": "35%", "left": "10%"}
-                ]
+                    {"type": "blue", "text": "METFORMIN 500MG ER", "top": "25%", "left": "15%"},
+                    {"type": "red", "text": "Exp: 11/2025", "bottom": "20%", "right": "10%"}
+                ],
+                "dialog": {
+                    "drug": "Metformin Hydrochloride Extended Release",
+                    "strength": "500mg",
+                    "prescriber": "Apollo Pharmacy Dispense (Dr. R. Mehta)",
+                    "substrate": "Specular Metallic Blister Pack",
+                    "batch": "4B391 • Exp: 11/2025"
+                }
             },
             {
-                "title": "STATUARIO-LOT-09",
-                "subtitle": "Polished Calacatta Bundle • May 28, 2024",
-                "tag": "REFERENCE",
-                "overlay1": "Polished Slab",
-                "overlay2": "Non-target",
-                "img": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
-                "action": "↗️ Differential",
-                "primary": False,
-                "score": "Non-match",
-                "keywords": ["stone", "marble", "white", "polished", "slab", "statuario", "warehouse", "quartz"]
+                "title": "Hypertension Rx (Telmisartan)",
+                "subtitle": "Oct 14, 2024 • Dr. A. R. Khan (Cardiology)",
+                "tag": "TELMISARTAN 40MG",
+                "overlay1": "Substrate: Doctor Script",
+                "overlay2": "1 Tab Daily OD",
+                "img": "https://images.unsplash.com/photo-1583324113626-70df0f4deaab?auto=format&fit=crop&w=800&q=80",
+                "verified": "Verified Seal: City Hospital",
+                "bboxes": [{"type": "yellow", "text": "Telmisartan 40mg (OD)", "top": "40%", "left": "25%"}],
+                "dialog": {"drug": "Telmisartan", "strength": "40mg", "prescriber": "Dr. A. R. Khan", "substrate": "Handwritten Script", "batch": "N/A"}
             },
             {
-                "title": "BLK-99 // SECT-04",
-                "subtitle": "Quarried Black Granite • Jun 2, 2024",
-                "tag": "QUARRY",
-                "overlay1": "Granite",
-                "overlay2": "Negative",
-                "img": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
-                "action": "📄 View Site Log",
-                "primary": False,
-                "score": "Negative",
-                "keywords": ["granite", "black", "block", "quarry", "stone", "rock", "raw", "heavy"]
+                "title": "Metabolic & HbA1c Panel",
+                "subtitle": "Oct 26, 2024 • Metropolis Healthcare Labs",
+                "tag": "HBA1C: 7.2% (ELEVATED)",
+                "overlay1": "Substrate: Lab Report",
+                "overlay2": "Range: 4.0-5.6%",
+                "img": "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80",
+                "verified": "Metropolis Healthcare Labs",
+                "bboxes": [{"type": "red", "text": "HbA1c: 7.2%", "top": "50%", "left": "30%"}],
+                "dialog": {"drug": "Diagnostic Blood Panel", "strength": "N/A", "prescriber": "Dr. Sarah Chen", "substrate": "A4 Print with Blue Seal", "batch": "SID: 8849201"}
             },
             {
-                "title": "BALAJI-CHALLAN-49102",
-                "subtitle": "Delivery Memo • 11:15 AM IST",
-                "tag": "DOCUMENT",
-                "overlay1": "Fiscal",
-                "overlay2": "Challan",
-                "img": "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=800&q=80",
-                "action": "🔍 Cross-Ref Challan",
-                "primary": False,
-                "score": "Indexed",
-                "keywords": ["document", "paper", "receipt", "challan", "invoice", "memo", "delivery", "slip", "bill"]
+                "title": "Pharmacy Register Receipt",
+                "subtitle": "Oct 16, 2024 • Total $65.03 Paid",
+                "tag": "CITY DRUG PHARMACY",
+                "overlay1": "Substrate: Thermal Paper",
+                "overlay2": "4 Meds Listed",
+                "img": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80",
+                "verified": "Fiscal Non-Clinical Slip",
+                "bboxes": [{"type": "blue", "text": "Total: $65.03", "bottom": "15%", "right": "20%"}],
+                "dialog": {"drug": "Multiple (Fiscal)", "strength": "N/A", "prescriber": "N/A", "substrate": "Thermal Receipt", "batch": "Trans: #4928"}
             }
         ]
     },
     {
-        "date_header": "Nov 8, 2025 • Jubilee Hills",
-        "location": "Villa 42 (Plumbing Offset)",
+        "date_header": "August 2024 • Diagnostic Panel & Annual Checkup",
         "cards": [
             {
-                "title": "OFFSET 150mm -> VP 08/11",
-                "subtitle": "PVC Pipe Chase • 09:14 AM IST",
-                "tag": "TARGET",
-                "overlay1": "Substrate: Brick",
-                "overlay2": "OFFSET 150mm",
-                "img": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80",
-                "action": "👁️ Inspector Lightbox",
-                "primary": True,
-                "score": "Parity 1.0",
-                "keywords": ["pipe", "plumbing", "pvc", "brick", "wall", "rough-in", "measurement", "tape", "offset", "water", "plumber"],
-                "bboxes": [
-                    {"type": "yellow", "text": "OFFSET 150mm -> VP 08/11", "top": "40%", "left": "20%"}
-                ]
+                "title": "CBC Complete Blood Count",
+                "subtitle": "Aug 12, 2024 • City Lab Services",
+                "tag": "WBC: 6.8 K/uL",
+                "overlay1": "Substrate: Lab Report",
+                "overlay2": "Normal Range",
+                "img": "https://images.unsplash.com/photo-1638202993928-7267aad84c31?auto=format&fit=crop&w=800&q=80",
+                "verified": "Verified Seal: City Lab",
+                "bboxes": [{"type": "yellow", "text": "WBC: 6.8", "top": "30%", "left": "40%"}],
+                "dialog": {"drug": "CBC Panel", "strength": "N/A", "prescriber": "Self", "substrate": "A4 Print", "batch": "SID: 77391"}
             },
             {
-                "title": "ELEC-CONDUIT-11",
-                "subtitle": "Chased electrical conduit • 10:20 AM IST",
-                "tag": "DECOY",
-                "overlay1": "Substrate: Brick",
-                "overlay2": "Negative",
-                "img": "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80",
-                "action": "📄 View Site Log",
-                "primary": False,
-                "score": "Negative",
-                "keywords": ["electrical", "wire", "conduit", "brick", "wall", "chase", "piping", "electrician"]
+                "title": "Thyroid Profile (TSH)",
+                "subtitle": "Aug 12, 2024 • City Lab Services",
+                "tag": "TSH: 2.1 mIU/L",
+                "overlay1": "Substrate: Lab Report",
+                "overlay2": "Euthyroid",
+                "img": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80",
+                "verified": "Verified Seal: City Lab",
+                "bboxes": [{"type": "blue", "text": "TSH: 2.1", "top": "40%", "left": "20%"}],
+                "dialog": {"drug": "Thyroid Panel", "strength": "N/A", "prescriber": "Self", "substrate": "A4 Print", "batch": "SID: 77391"}
             },
             {
-                "title": "SLAB-CORE-05",
-                "subtitle": "Sunken slab core cut • 11:05 AM IST",
-                "tag": "DECOY",
-                "overlay1": "Concrete",
-                "overlay2": "Negative",
-                "img": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80",
-                "action": "📄 View Site Log",
-                "primary": False,
-                "score": "Negative",
-                "keywords": ["core", "cut", "hole", "concrete", "slab", "floor", "drill"]
+                "title": "Cardiologist Follow-up Note",
+                "subtitle": "Aug 05, 2024 • Dr. A. R. Khan",
+                "tag": "BP: 120/80",
+                "overlay1": "Substrate: Doctor Script",
+                "overlay2": "Stable",
+                "img": "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=800&q=80",
+                "verified": "Verified Signature",
+                "bboxes": [{"type": "red", "text": "BP: 120/80", "top": "60%", "left": "50%"}],
+                "dialog": {"drug": "Clinical Note", "strength": "N/A", "prescriber": "Dr. A. R. Khan", "substrate": "Handwritten Note", "batch": "N/A"}
             },
             {
-                "title": "HVAC-HANGER-02",
-                "subtitle": "Ceiling HVAC hanger markings • 02:15 PM IST",
-                "tag": "DECOY",
-                "overlay1": "Concrete",
-                "overlay2": "Negative",
-                "img": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-                "action": "📄 View Site Log",
-                "primary": False,
-                "score": "Negative",
-                "keywords": ["hvac", "ceiling", "hanger", "duct", "concrete", "markings", "vent"]
-            }
-        ]
-    },
-    {
-        "date_header": "Aug 18, 2025 • Madhapur Commercial",
-        "location": "M35 Lab Cube Report",
-        "cards": [
-            {
-                "title": "M35 GRADE 41.2 N/mm2",
-                "subtitle": "Lab test certificate • 04:30 PM IST",
-                "tag": "TARGET",
-                "overlay1": "A4 Certificate",
-                "overlay2": "M35 GRADE",
-                "img": "https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&w=800&q=80",
-                "action": "👁️ Inspector Lightbox",
-                "primary": True,
-                "score": "Parity 1.0",
-                "keywords": ["document", "paper", "report", "certificate", "lab", "test", "m35", "concrete", "grade", "seal", "stamp", "quality"],
-                "bboxes": [
-                    {"type": "blue", "text": "M35 GRADE 28 DAYS 41.2 N/mm2", "top": "50%", "left": "10%"}
-                ]
-            },
-            {
-                "title": "RMC-POUR-14",
-                "subtitle": "Transit concrete pour • 08:15 AM IST",
-                "tag": "DECOY",
-                "overlay1": "Concrete",
-                "overlay2": "Negative",
-                "img": "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80",
-                "action": "📄 View Site Log",
-                "primary": False,
-                "score": "Negative",
-                "keywords": ["concrete", "pour", "truck", "transit", "rmc", "site", "cement", "mixer"]
-            },
-            {
-                "title": "CUBE-TEST-01",
-                "subtitle": "Concrete test cubes on water tank • 09:00 AM IST",
-                "tag": "DECOY",
-                "overlay1": "Concrete",
-                "overlay2": "Negative",
-                "img": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
-                "action": "📄 View Site Log",
-                "primary": False,
-                "score": "Negative",
-                "keywords": ["concrete", "cube", "test", "water", "curing", "tank", "cement", "sample"]
+                "title": "Influenza Vaccination Record",
+                "subtitle": "Aug 01, 2024 • Apex Clinic",
+                "tag": "FLUZONE QUAD",
+                "overlay1": "Substrate: Cardstock",
+                "overlay2": "Administered",
+                "img": "https://images.unsplash.com/photo-1605289982774-9a6fef564df8?auto=format&fit=crop&w=800&q=80",
+                "verified": "Apex Clinic",
+                "bboxes": [{"type": "yellow", "text": "FluZone 0.5mL", "bottom": "40%", "left": "20%"}],
+                "dialog": {"drug": "FluZone Quadrivalent", "strength": "0.5mL", "prescriber": "Apex Clinic Staff", "substrate": "Printed Cardstock", "batch": "Lot: 9942Z"}
             }
         ]
     }
 ]
 
-site_photos = [c["img"] for s in sections for c in s["cards"]]
+# Handle Dialogs
+if st.session_state.selected_card:
+    for s in health_sections:
+        for c in s['cards']:
+            if c['title'] == st.session_state.selected_card:
+                show_lightbox(c)
+                st.session_state.selected_card = None
 
 
-# ==========================================
-# UI RENDERING BASED ON SIDEBAR SELECTION
-# ==========================================
-
+# Rendering
 if selected_nav == "🖼️ Photos":
-    st.markdown('<div style="background-color: #f1f3f4; border-radius: 24px; padding: 10px 16px; color: #5f6368; display: flex; align-items: center; gap: 8px;"><span style="font-size:18px;">🔍</span> Search your photos</div>', unsafe_allow_html=True)
+    st.markdown('<div style="background-color: #303134; border-radius: 24px; padding: 10px 16px; color: #9aa0a6; display: flex; align-items: center; gap: 8px;"><span style="font-size:18px;">🔍</span> Search your photos, albums, and health records</div>', unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("<h4 style='font-weight: 500; color:#e8eaed;'>Timeline</h4>", unsafe_allow_html=True)
+    cols = st.columns(4)
+    mixed = family_photos + [c['img'] for s in health_sections for c in s['cards']]
+    import random
+    random.seed(42)
+    random.shuffle(mixed)
+    for i, img in enumerate(mixed):
+        with cols[i % 4]:
+            st.markdown(f'<div class="legacy-img-container"><img src="{img}"></div>', unsafe_allow_html=True)
+
+elif selected_nav == "🏥 Health Cabinet":
+    
+    # Search and Toggle Bar
+    st.text_input("Search", key="search_query_input", placeholder="🔍 Search your photos, albums, and health records...", label_visibility="collapsed")
+    
     st.markdown("<br>", unsafe_allow_html=True)
     
-    st.markdown("<h4 style='font-weight: 500; color:#202124;'>Today</h4>", unsafe_allow_html=True)
-    cols = st.columns(4)
-    mixed_today = [site_photos[0], family_photos[0], site_photos[1], family_photos[1]]
-    for i, img in enumerate(mixed_today):
-        with cols[i]:
-            st.markdown(f'<div class="legacy-img-container" style="border-radius: 12px;"><img src="{img}"></div>', unsafe_allow_html=True)
-            
-    st.markdown("<h4 style='font-weight: 500; color:#202124;'>Yesterday</h4>", unsafe_allow_html=True)
-    cols = st.columns(4)
-    mixed_yesterday = [document_photos[0], site_photos[2], family_photos[2], site_photos[3]]
-    for i, img in enumerate(mixed_yesterday):
-        with cols[i]:
-            st.markdown(f'<div class="legacy-img-container" style="border-radius: 12px;"><img src="{img}"></div>', unsafe_allow_html=True)
-            
-    st.markdown("<h4 style='font-weight: 500; color:#202124;'>Last Week</h4>", unsafe_allow_html=True)
-    cols = st.columns(5)
-    mixed_last_week = [site_photos[4], site_photos[6], family_photos[4], site_photos[7], family_photos[5], document_photos[2], site_photos[8], document_photos[3], site_photos[9], site_photos[10]]
-    for i, img in enumerate(mixed_last_week):
-        with cols[i % 5]:
-            st.markdown(f'<div class="legacy-img-container" style="border-radius: 12px;"><img src="{img}"></div>', unsafe_allow_html=True)
-
-elif selected_nav == "📁 Evidence Partition":
-    
-    # 2. INTERACTIVE TOP BAR SEARCH
-    col1, col2 = st.columns([5, 1])
-    with col1:
-        st.text_input("Search", key="search_query", placeholder="🔍 Try searching: 'plumbing', 'stone slab', 'concrete', 'certificate', or 'pipe'", label_visibility="collapsed")
-    with col2:
-        if st.session_state.search_query:
-            st.markdown('<div style="background-color: #fef7e0; color: #b06000; padding: 6px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #fbbc04; font-weight: 600; text-align: center; margin-top: 2px;">✨ Evidence Lens: Active</div>', unsafe_allow_html=True)
-        else:
-            st.markdown('<div style="background-color: #f1f3f4; color: #5f6368; padding: 6px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #dadce0; font-weight: 600; text-align: center; margin-top: 2px;">✨ Evidence Lens</div>', unsafe_allow_html=True)
-            
-    # Interactive Suggestion Chips
-    s_cols = st.columns([1.2, 1.2, 1.2, 1.2, 1.2, 4])
-    s_cols[0].button("🔧 Plumbing", on_click=set_search, args=("plumbing",))
-    s_cols[1].button("🪨 Stone Slab", on_click=set_search, args=("stone slab",))
-    s_cols[2].button("🏗️ Concrete", on_click=set_search, args=("concrete",))
-    s_cols[3].button("📄 Lab Report", on_click=set_search, args=("lab report",))
-    if st.session_state.search_query:
-        s_cols[4].button("✖ Clear", on_click=set_search, args=("",))
+    col_chips, col_mode1, col_mode2 = st.columns([5, 1.5, 1.5])
+    with col_chips:
+        c1, c2, c3, c4 = st.columns(4)
+        c1.button("💊 Substrate: Silver Foil", on_click=set_search, args=("metformin",))
+        c2.button("✍️ Rx Doctor Script", on_click=set_search, args=("script",))
+        c3.button("🩸 Lab Blood Reports", on_click=set_search, args=("lab",))
+        c4.button("🧾 Pharmacy Receipts", on_click=set_search, args=("receipt",))
+        
+    with col_mode1:
+        css = "toggle-active" if st.session_state.health_mode == "legacy" else ""
+        st.markdown(f'<div class="{css}">', unsafe_allow_html=True)
+        st.button("📸 Photos Legacy Search -8.2s delay", on_click=set_mode, args=("legacy",))
+        st.markdown('</div>', unsafe_allow_html=True)
+    with col_mode2:
+        css = "toggle-active" if st.session_state.health_mode == "lens" else ""
+        st.markdown(f'<div class="{css}">', unsafe_allow_html=True)
+        st.button("🏥 Health Cabinet AI Lens", on_click=set_mode, args=("lens",))
+        st.markdown('</div>', unsafe_allow_html=True)
         
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Metrics Header
-    st.markdown('<div style="font-size: 12px; color: #5f6368; text-align: right; padding-top: 10px; border-bottom: 1px solid #dadce0; padding-bottom: 10px; margin-bottom: 20px;">⚡ 18ms latency | 🛡️ Clean Verification (0% Contamination)</div>', unsafe_allow_html=True)
-    
-    st.info("🛡️ **24 domestic & family photos quarantined from work stream.** Analyzing site assets...")
-    
-    has_results = False
-    
-    for section in sections:
-        if st.session_state.search_query:
-            q = st.session_state.search_query.lower()
-            filtered_cards = [
-                c for c in section["cards"] 
-                if q in c["title"].lower() 
-                or q in c["tag"].lower() 
-                or q in c["subtitle"].lower()
-                or any(q in kw.lower() for kw in c.get("keywords", []))
-            ]
-        else:
-            filtered_cards = section["cards"]
-            
-        if filtered_cards:
-            has_results = True
-            st.markdown(f"<h4 style='font-weight: 500; color:#202124; margin-top:20px;'>{section['date_header']} <span style='font-size:12px; background:#f1f3f4; padding:4px 10px; border-radius:12px; margin-left:10px; color:#5f6368; border: 1px solid #dadce0;'>{section['location']}</span></h4>", unsafe_allow_html=True)
-            
+    if st.session_state.health_mode == "lens":
+        st.markdown('<div style="font-size: 12px; color: #9aa0a6; padding-bottom: 10px; margin-bottom: 20px;"><span style="background: rgba(138,180,248,0.1); color: #8ab4f8; padding: 4px 8px; border-radius: 12px;">⚡ 22ms Latency</span> &nbsp; <span style="background: rgba(138,180,248,0.1); color: #8ab4f8; padding: 4px 8px; border-radius: 12px;">🛡️ 0% Clutter Leakage</span> &nbsp; <span style="background: rgba(138,180,248,0.1); color: #8ab4f8; padding: 4px 8px; border-radius: 12px;">🎯 Match: Clinical Records</span></div>', unsafe_allow_html=True)
+        st.info("🛡️ **18 personal & family photos quarantined** from clinical stream • 8 clinical health records isolated & authenticated")
+        
+        for section in health_sections:
+            st.markdown(f"<h4 style='font-weight: 500; color:#e8eaed; margin-top:20px;'>{section['date_header']}</h4>", unsafe_allow_html=True)
             cols = st.columns(4)
-            for i, c in enumerate(filtered_cards):
+            for i, c in enumerate(section["cards"]):
                 with cols[i % 4]:
-                    action_class = "card-action primary" if c["primary"] else "card-action"
-                    
                     bboxes_html = ""
-                    if "bboxes" in c:
-                        for bbox in c["bboxes"]:
-                            top = f"top: {bbox.get('top', 'auto')};"
-                            bottom = f"bottom: {bbox.get('bottom', 'auto')};"
-                            left = f"left: {bbox.get('left', 'auto')};"
-                            right = f"right: {bbox.get('right', 'auto')};"
-                            bboxes_html += f"""<div class="bbox {bbox['type']}" style="{top} {bottom} {left} {right}">{bbox['text']}</div>"""
+                    for bbox in c.get("bboxes", []):
+                        top = f"top: {bbox.get('top', 'auto')};"
+                        bottom = f"bottom: {bbox.get('bottom', 'auto')};"
+                        left = f"left: {bbox.get('left', 'auto')};"
+                        right = f"right: {bbox.get('right', 'auto')};"
+                        bboxes_html += f"""<div class="bbox {bbox['type']}" style="{top} {bottom} {left} {right}">{bbox['text']}</div>"""
                     
-                    html = f"""
+                    st.markdown(f"""
                     <div class="evidence-card">
                         <div class="card-img-container">
                             <img src="{c['img']}">
                             {bboxes_html}
+                            <div class="card-hover-actions">
+                                <div class="hover-icon">✔️</div>
+                                <div class="hover-icon">⭐</div>
+                            </div>
                             <div class="card-tag">{c['tag']}</div>
                             <div class="card-overlay">
                                 <div class="overlay-pill">{c['overlay1']}</div>
-                                <div class="overlay-pill" style="color:#1a73e8; border-color:#8ab4f8;">{c['overlay2']}</div>
+                                <div class="overlay-pill" style="color:#8ab4f8; border-color:#8ab4f8;">{c['overlay2']}</div>
                             </div>
                         </div>
                         <div class="card-content">
-                            <div class="card-title">
-                                <span>{c['title']}</span>
-                                <span style="font-size:10px; background:#e8f0fe; color:#1a73e8; padding:2px 6px; border-radius:4px; font-weight:700;">{c['score']}</span>
-                            </div>
+                            <div class="card-title">{c['title']}</div>
                             <div class="card-subtitle">{c['subtitle']}</div>
-                            <div class="{action_class}">{c['action']}</div>
+                            <div class="verified-pill">✔️ {c['verified']}</div>
                         </div>
                     </div>
-                    """
-                    st.markdown(html, unsafe_allow_html=True)
-                    
-    if not has_results:
-        st.info(f"No evidence assets found matching '{st.session_state.search_query}'. Try searching for 'plumbing', 'stone', 'document', or 'concrete'.")
+                    """, unsafe_allow_html=True)
+                    st.button("🔍 Open Lightbox", key=f"btn_{c['title']}", on_click=open_lightbox, args=(c['title'],), use_container_width=True)
 
-elif selected_nav == "🧭 Explore":
-    st.title("🧭 Explore")
-    st.markdown("Discover places, people, and things.")
-    st.markdown("#### People & Pets")
-    cols = st.columns(6)
-    for i, img in enumerate(explore_faces + [family_photos[2]]):
-        with cols[i % 6]:
-            st.markdown(f'<div class="legacy-img-container" style="border-radius: 50%;"><img src="{img}"></div>', unsafe_allow_html=True)
-    
-    st.markdown("#### Places")
-    cols = st.columns(4)
-    for i, img in enumerate(explore_places + [family_photos[0], site_photos[2]]):
-        with cols[i % 4]:
-            st.markdown(f'<div class="legacy-img-container" style="aspect-ratio: 16/9;"><img src="{img}"></div>', unsafe_allow_html=True)
+    else:
+        # Legacy Mode (Failure State)
+        st.markdown('<div style="font-size: 12px; color: #9aa0a6; padding-bottom: 10px; margin-bottom: 20px;"><span style="background: rgba(242,139,130,0.1); color: #f28b82; padding: 4px 8px; border-radius: 12px;">⏱️ 4,200ms latency</span> &nbsp; <span style="background: rgba(242,139,130,0.1); color: #f28b82; padding: 4px 8px; border-radius: 12px;">⚠️ 48.0% Personal Contamination</span> &nbsp; <span style="background: rgba(242,139,130,0.1); color: #f28b82; padding: 4px 8px; border-radius: 12px;">No Exact Entity Match</span></div>', unsafe_allow_html=True)
+        st.warning("Showing 12 unranked results for search • Personal family media and food snapshots included")
+        
+        st.markdown(f"<h4 style='font-weight: 500; color:#e8eaed; margin-top:20px;'>Search Results</h4>", unsafe_allow_html=True)
+        cols = st.columns(4)
+        
+        mixed = [health_sections[0]['cards'][0]['img'], family_photos[0], family_photos[1], health_sections[0]['cards'][1]['img'], family_photos[2], health_sections[0]['cards'][2]['img'], family_photos[3], health_sections[1]['cards'][0]['img']]
+        for i, img in enumerate(mixed):
+            with cols[i % 4]:
+                st.markdown(f'<div class="legacy-img-container"><img src="{img}"></div>', unsafe_allow_html=True)
 
-elif selected_nav == "👥 Sharing":
-    st.title("👥 Sharing")
-    st.markdown("Albums and photos shared with you.")
-    cols = st.columns(3)
-    with cols[0]:
-        st.markdown(f'<div class="legacy-img-container" style="aspect-ratio: 16/9; position: relative;"><img src="{family_photos[4]}"><div style="position: absolute; bottom: 10px; left: 10px; color: white; font-weight: bold; text-shadow: 1px 1px 3px black;">Family Vacation 2025</div></div>', unsafe_allow_html=True)
-    with cols[1]:
-        st.markdown(f'<div class="legacy-img-container" style="aspect-ratio: 16/9; position: relative;"><img src="{site_photos[5]}"><div style="position: absolute; bottom: 10px; left: 10px; color: white; font-weight: bold; text-shadow: 1px 1px 3px black;">Site Engineers (Madhapur)</div></div>', unsafe_allow_html=True)
-
-elif selected_nav == "📚 Albums":
-    st.title("📚 Albums")
-    st.markdown("Your collections.")
-    cols = st.columns(4)
-    albums = [
-        {"title": "Downloads", "img": document_photos[0]},
-        {"title": "Jubilee Hills Delivery", "img": site_photos[8]},
-        {"title": "WhatsApp Images", "img": family_photos[3]},
-        {"title": "Favorites", "img": family_photos[2]}
-    ]
-    for i, a in enumerate(albums):
-        with cols[i]:
-            st.markdown(f'<div class="legacy-img-container" style="border-radius: 12px;"><img src="{a["img"]}"></div><div style="font-weight: 500;">{a["title"]}</div><div style="font-size: 12px; color: gray;">{i*12 + 4} items</div>', unsafe_allow_html=True)
-
-elif selected_nav == "📄 Documents":
-    st.title("📄 Documents")
-    st.markdown("Automatically categorized receipts, notes, and lab reports.")
-    st.markdown("<h4 style='font-weight: 500; color:#202124; margin-top:20px;'>Receipts & Forms</h4>", unsafe_allow_html=True)
-    cols = st.columns(5)
-    for i, img in enumerate(document_photos):
-        with cols[i]:
-            st.markdown(f'<div class="legacy-img-container" style="aspect-ratio: 3/4;"><img src="{img}"></div>', unsafe_allow_html=True)
-
-elif selected_nav == "🗑️ Trash":
-    st.title("🗑️ Trash")
-    st.markdown("Items here will be permanently deleted after 60 days.")
-    cols = st.columns(6)
-    trash_items = [site_photos[1], family_photos[5], document_photos[1]]
-    for i, img in enumerate(trash_items):
-        with cols[i]:
-            st.markdown(f'<div class="legacy-img-container" style="opacity: 0.5; filter: grayscale(100%);"><img src="{img}"></div>', unsafe_allow_html=True)
+else:
+    st.info(f"You selected {selected_nav}. This is a placeholder for the MVP.")
