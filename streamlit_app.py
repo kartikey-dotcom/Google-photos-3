@@ -344,7 +344,7 @@ health_sections = [
                 "tag": "TELMISARTAN 40MG",
                 "overlay1": "Substrate: Doctor Script",
                 "overlay2": "1 Tab Daily OD",
-                "img": "https://images.unsplash.com/photo-1583324113626-70df0f4deaab?auto=format&fit=crop&w=800&q=80",
+                "img": "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=800&q=80",
                 "verified": "Verified Seal: City Hospital",
                 "bboxes": [{"type": "yellow", "text": "Telmisartan 40mg (OD)", "top": "40%", "left": "25%"}],
                 "dialog": {"drug": "Telmisartan", "strength": "40mg", "prescriber": "Dr. A. R. Khan", "substrate": "Handwritten Script", "batch": "N/A"}
@@ -382,7 +382,7 @@ health_sections = [
                 "tag": "WBC: 6.8 K/uL",
                 "overlay1": "Substrate: Lab Report",
                 "overlay2": "Normal Range",
-                "img": "https://images.unsplash.com/photo-1638202993928-7267aad84c31?auto=format&fit=crop&w=800&q=80",
+                "img": "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80",
                 "verified": "Verified Seal: City Lab",
                 "bboxes": [{"type": "yellow", "text": "WBC: 6.8", "top": "30%", "left": "40%"}],
                 "dialog": {"drug": "CBC Panel", "strength": "N/A", "prescriber": "Self", "substrate": "A4 Print", "batch": "SID: 77391"}
