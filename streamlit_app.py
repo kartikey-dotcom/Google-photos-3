@@ -1,6 +1,7 @@
 import streamlit as st
+import time
 
-st.set_page_config(layout="wide", page_title="Google Photos | Evidence Partition", initial_sidebar_state="expanded")
+st.set_page_config(layout="wide", page_title="Google Photos", initial_sidebar_state="expanded")
 
 # Inject Custom CSS to override Streamlit's default styling for Google Photos Light Mode
 st.markdown("""
@@ -139,6 +140,19 @@ st.markdown("""
         object-fit: cover;
     }
     
+    /* Legacy Image Grid Container */
+    .legacy-img-container {
+        width: 100%;
+        aspect-ratio: 1;
+        overflow: hidden;
+        margin-bottom: 10px;
+    }
+    .legacy-img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
     /* Bounding Boxes */
     .bbox {
         position: absolute;
@@ -249,7 +263,7 @@ with st.sidebar:
         "🗑️ Trash"
     ]
     
-    selected_nav = st.radio("Navigation", menu_options, index=5, label_visibility="collapsed")
+    selected_nav = st.radio("Navigation", menu_options, index=0, label_visibility="collapsed")
     
     st.markdown("<br><br><br><br><br><br><br><br><br>", unsafe_allow_html=True)
     st.markdown("""
@@ -264,7 +278,17 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-# Dataset definition based on Unsplash high-res assets + Decoys
+
+# Core Data
+family_photos = [
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1620577438165-22d7d8e20257?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1555621805-4c07a51d9eb1?auto=format&fit=crop&w=400&q=80",
+]
+
 sections = [
     {
         "date_header": "Today • Sunday, Jun 2, 2024",
@@ -417,52 +441,52 @@ sections = [
     }
 ]
 
-# Handle UI based on Interactive Selection
-if selected_nav == "📁 Evidence Partition":
+# Extract all site images for legacy interleave
+site_photos = [c["img"] for s in sections for c in s["cards"]]
+
+
+# Handle UI based on Interactive Selection (Main Photos Feed)
+if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
+    
     # 2. INTERACTIVE TOP BAR SEARCH
     col1, col2 = st.columns([5, 1])
     with col1:
-        search_query = st.text_input("Search", value="", placeholder="🔍 e.g. LOT-GR-408 / SL-14 or OFFSET", label_visibility="collapsed")
+        search_query = st.text_input("Search", value="", placeholder="🔍 e.g. 'Travertine slab', 'Plumbing offset', or 'LOT-GR-408'", label_visibility="collapsed")
     with col2:
-        st.markdown('<div style="background-color: #fef7e0; color: #b06000; padding: 6px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #fbbc04; font-weight: 600; text-align: center; margin-top: 2px;">✨ Evidence Lens: Active</div>', unsafe_allow_html=True)
-    
+        if search_query and "LOT" in search_query.upper():
+            st.markdown('<div style="background-color: #fef7e0; color: #b06000; padding: 6px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #fbbc04; font-weight: 600; text-align: center; margin-top: 2px;">✨ Evidence Lens: Active</div>', unsafe_allow_html=True)
+        else:
+            st.markdown('<div style="background-color: #f1f3f4; color: #5f6368; padding: 6px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #dadce0; font-weight: 600; text-align: center; margin-top: 2px;">✨ Evidence Lens</div>', unsafe_allow_html=True)
+            
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # 3. FILTERS & METRICS
-    st.markdown("""
-    <div class="filter-row">
-        <div class="chip">📍 Nagarjuna Sagar Yard (May 2024) ✕</div>
-        <div class="chip">💠 Substrate: Rough Natural Stone ✕</div>
-        <div class="chip">✏️ Marking: Wax Grease Pencil</div>
-        <div class="chip">👁️ Overlays: Visible</div>
-    </div>
-    <div class="filter-row">
-        <div class="chip">⚡ 18ms latency</div>
-        <div class="chip">🛡️ Clean Verification</div>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("<hr style='margin: 10px 0;'>", unsafe_allow_html=True)
+    # Check if Evidence Partition was explicitly clicked, force lens mode
+    default_mode_index = 1 if selected_nav == "📁 Evidence Partition" else 0
     
     col_toggle, col_stats = st.columns([2, 1])
     with col_toggle:
         st.markdown('<div class="main-toggle">', unsafe_allow_html=True)
-        view_mode = st.radio("Mode", ["🕘 Photos Legacy Mode", "✨ Evidence Lens Lab (Active)"], index=1, horizontal=True, label_visibility="collapsed")
+        view_mode = st.radio("Mode", ["🕘 Photos Legacy Mode", "✨ Evidence Lens Lab (Active)"], index=default_mode_index, horizontal=True, label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
         
     with col_stats:
-        st.markdown('<div style="font-size: 12px; color: #5f6368; text-align: right; padding-top: 10px;">🔵 64 items streamed • Zero semantic leakage</div>', unsafe_allow_html=True)
+        if view_mode == "✨ Evidence Lens Lab (Active)":
+            st.markdown('<div style="font-size: 12px; color: #5f6368; text-align: right; padding-top: 10px;">⚡ 18ms latency | 🛡️ Clean Verification (0% Contamination)</div>', unsafe_allow_html=True)
+        else:
+            st.markdown('<div style="font-size: 12px; color: #5f6368; text-align: right; padding-top: 10px;">☁️ Synchronized with cloud</div>', unsafe_allow_html=True)
     
     st.markdown("<hr style='margin: 10px 0 20px 0;'>", unsafe_allow_html=True)
     
     if view_mode == "✨ Evidence Lens Lab (Active)":
+        
+        st.info("🛡️ **24 domestic & family photos quarantined from work stream.** Analyzing site assets...")
         
         has_results = False
         
         for section in sections:
             # Filter cards for this section
             if search_query:
-                filtered_cards = [c for c in section["cards"] if search_query.lower() in c["title"].lower() or search_query.lower() in c["tag"].lower()]
+                filtered_cards = [c for c in section["cards"] if search_query.lower() in c["title"].lower() or search_query.lower() in c["tag"].lower() or search_query.lower() in c["subtitle"].lower()]
             else:
                 filtered_cards = section["cards"]
                 
@@ -514,12 +538,46 @@ if selected_nav == "📁 Evidence Partition":
             st.info(f"No evidence assets found matching '{search_query}'. Try searching for 'LOT-GR', 'OFFSET', or 'M35'.")
             
     else:
-        st.error("⚠️ Legacy Mode active. Professional indexing disabled. Expect high contamination from domestic photos and 14+ minutes to find technical assets manually via pinch-to-zoom.")
-        st.markdown("**(Simulated Legacy Cloud Search Results)**")
-        cols = st.columns(5)
-        for i in range(5):
-            with cols[i]:
-                st.image("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=150&h=150", caption="Beach_Vacation.jpg")
+        # LEGACY MODE (The massive unorganized dump)
+        if search_query:
+            with st.spinner('Searching Google Photos...'):
+                time.sleep(4)
+            st.error("⚠️ **Cross-Domain Contamination: 50.0% (Personal media leaked)**")
+            
+            st.markdown("<h4 style='font-weight: 500; color:#202124;'>Search Results</h4>", unsafe_allow_html=True)
+            
+            cols = st.columns(6)
+            mixed_results = [
+                family_photos[0], site_photos[0], family_photos[1], 
+                site_photos[1], family_photos[4], site_photos[4], 
+                family_photos[3], site_photos[8]
+            ]
+            for i, img_src in enumerate(mixed_results):
+                with cols[i % 6]:
+                    st.markdown(f'<div class="legacy-img-container"><img src="{img_src}"></div>', unsafe_allow_html=True)
+                    
+        else:
+            st.markdown("<h4 style='font-weight: 500; color:#202124;'>Yesterday</h4>", unsafe_allow_html=True)
+            cols = st.columns(6)
+            mixed_yesterday = [family_photos[0], family_photos[1], site_photos[0], site_photos[1], family_photos[2], family_photos[4]]
+            for i, img_src in enumerate(mixed_yesterday):
+                with cols[i % 6]:
+                    st.markdown(f'<div class="legacy-img-container"><img src="{img_src}"></div>', unsafe_allow_html=True)
+            
+            st.markdown("<h4 style='font-weight: 500; color:#202124;'>Last Week</h4>", unsafe_allow_html=True)
+            cols = st.columns(6)
+            mixed_last_week = [site_photos[4], site_photos[5], site_photos[6], site_photos[7], family_photos[3], family_photos[5]]
+            for i, img_src in enumerate(mixed_last_week):
+                with cols[i % 6]:
+                    st.markdown(f'<div class="legacy-img-container"><img src="{img_src}"></div>', unsafe_allow_html=True)
+                    
+            st.markdown("<h4 style='font-weight: 500; color:#202124;'>August 2025</h4>", unsafe_allow_html=True)
+            cols = st.columns(6)
+            mixed_august = [family_photos[0], site_photos[8], site_photos[9], site_photos[10], family_photos[1], family_photos[2]]
+            for i, img_src in enumerate(mixed_august):
+                with cols[i % 6]:
+                    st.markdown(f'<div class="legacy-img-container"><img src="{img_src}"></div>', unsafe_allow_html=True)
+                    
 else:
-    st.info(f"You selected **{selected_nav}**. This section is not part of the Evidence Lens MVP.")
+    st.info(f"You selected **{selected_nav}**. This section is not built for the MVP demo.")
 
