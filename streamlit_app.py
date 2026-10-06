@@ -3,7 +3,7 @@ import time
 
 st.set_page_config(layout="wide", page_title="Google Photos", initial_sidebar_state="expanded")
 
-# Inject Custom CSS to override Streamlit's default styling for Google Photos Light Mode
+# Inject Custom CSS to override Streamlit's default styling
 st.markdown("""
 <style>
     /* Global Light Theme Settings */
@@ -30,12 +30,12 @@ st.markdown("""
         border-right: 1px solid var(--border);
     }
     
-    /* Interactive Sidebar Menu (Radio Overrides) */
+    /* Interactive Sidebar Menu */
     [data-testid="stSidebar"] [data-testid="stRadio"] > div {
         gap: 2px;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] {
-        padding: 10px 16px 10px 16px !important;
+        padding: 8px 16px 8px 16px !important;
         border-radius: 0 20px 20px 0 !important;
         margin-left: -1rem !important;
         margin-right: 1rem !important;
@@ -45,15 +45,20 @@ st.markdown("""
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"]:hover {
         background-color: #f1f3f4 !important;
     }
-    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] > div:first-child {
-        display: none !important;
-    }
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] {
         background-color: #e8f0fe !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] p {
         color: var(--accent) !important;
         font-weight: 600 !important;
+    }
+    
+    /* Hide Radio Circles in Sidebar */
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] > div:first-child {
+        display: none !important;
+    }
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] > div:nth-child(1) {
+        display: none !important;
     }
     
     /* Search Bar Styling */
@@ -145,7 +150,8 @@ st.markdown("""
         width: 100%;
         aspect-ratio: 1;
         overflow: hidden;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
+        border-radius: 8px;
     }
     .legacy-img-container img {
         width: 100%;
@@ -281,12 +287,30 @@ with st.sidebar:
 
 # Core Data
 family_photos = [
-    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1620577438165-22d7d8e20257?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1555621805-4c07a51d9eb1?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80", # Beach
+    "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=400&q=80", # Food
+    "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=400&q=80", # Dog
+    "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=400&q=80", # Kids
+    "https://images.unsplash.com/photo-1473496169904-658ba37448eb?auto=format&fit=crop&w=400&q=80", # Vacation
+    "https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?auto=format&fit=crop&w=400&q=80", # Party
+]
+
+document_photos = [
+    "https://images.unsplash.com/photo-1620577438165-22d7d8e20257?auto=format&fit=crop&w=400&q=80", # Receipt
+    "https://images.unsplash.com/photo-1555621805-4c07a51d9eb1?auto=format&fit=crop&w=400&q=80", # Doctors Note
+    "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=400&q=80", # Site Challan
+    "https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&w=400&q=80", # Site Certificate
+]
+
+explore_faces = [
+    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80",
+]
+
+explore_places = [
+    "https://images.unsplash.com/photo-1506744626753-eda818c9ce5f?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80",
 ]
 
 sections = [
@@ -445,7 +469,10 @@ sections = [
 site_photos = [c["img"] for s in sections for c in s["cards"]]
 
 
-# Handle UI based on Interactive Selection (Main Photos Feed)
+# ==========================================
+# UI RENDERING BASED ON SIDEBAR SELECTION
+# ==========================================
+
 if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
     
     # 2. INTERACTIVE TOP BAR SEARCH
@@ -460,7 +487,6 @@ if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
             
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Check if Evidence Partition was explicitly clicked, force lens mode
     default_mode_index = 1 if selected_nav == "📁 Evidence Partition" else 0
     
     col_toggle, col_stats = st.columns([2, 1])
@@ -484,7 +510,6 @@ if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
         has_results = False
         
         for section in sections:
-            # Filter cards for this section
             if search_query:
                 filtered_cards = [c for c in section["cards"] if search_query.lower() in c["title"].lower() or search_query.lower() in c["tag"].lower() or search_query.lower() in c["subtitle"].lower()]
             else:
@@ -492,11 +517,8 @@ if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
                 
             if filtered_cards:
                 has_results = True
-                
-                # Render Section Header
                 st.markdown(f"<h4 style='font-weight: 500; color:#202124; margin-top:20px;'>{section['date_header']} <span style='font-size:12px; background:#f1f3f4; padding:4px 10px; border-radius:12px; margin-left:10px; color:#5f6368; border: 1px solid #dadce0;'>{section['location']}</span></h4>", unsafe_allow_html=True)
                 
-                # Render Cards
                 cols = st.columns(4)
                 for i, c in enumerate(filtered_cards):
                     with cols[i % 4]:
@@ -538,14 +560,13 @@ if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
             st.info(f"No evidence assets found matching '{search_query}'. Try searching for 'LOT-GR', 'OFFSET', or 'M35'.")
             
     else:
-        # LEGACY MODE (The massive unorganized dump)
+        # LEGACY MODE
         if search_query:
             with st.spinner('Searching Google Photos...'):
                 time.sleep(4)
             st.error("⚠️ **Cross-Domain Contamination: 50.0% (Personal media leaked)**")
             
             st.markdown("<h4 style='font-weight: 500; color:#202124;'>Search Results</h4>", unsafe_allow_html=True)
-            
             cols = st.columns(6)
             mixed_results = [
                 family_photos[0], site_photos[0], family_photos[1], 
@@ -555,7 +576,6 @@ if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
             for i, img_src in enumerate(mixed_results):
                 with cols[i % 6]:
                     st.markdown(f'<div class="legacy-img-container"><img src="{img_src}"></div>', unsafe_allow_html=True)
-                    
         else:
             st.markdown("<h4 style='font-weight: 500; color:#202124;'>Yesterday</h4>", unsafe_allow_html=True)
             cols = st.columns(6)
@@ -570,14 +590,60 @@ if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
             for i, img_src in enumerate(mixed_last_week):
                 with cols[i % 6]:
                     st.markdown(f'<div class="legacy-img-container"><img src="{img_src}"></div>', unsafe_allow_html=True)
-                    
-            st.markdown("<h4 style='font-weight: 500; color:#202124;'>August 2025</h4>", unsafe_allow_html=True)
-            cols = st.columns(6)
-            mixed_august = [family_photos[0], site_photos[8], site_photos[9], site_photos[10], family_photos[1], family_photos[2]]
-            for i, img_src in enumerate(mixed_august):
-                with cols[i % 6]:
-                    st.markdown(f'<div class="legacy-img-container"><img src="{img_src}"></div>', unsafe_allow_html=True)
-                    
-else:
-    st.info(f"You selected **{selected_nav}**. This section is not built for the MVP demo.")
+
+elif selected_nav == "🧭 Explore":
+    st.title("🧭 Explore")
+    st.markdown("Discover places, people, and things.")
+    st.markdown("#### People & Pets")
+    cols = st.columns(6)
+    for i, img in enumerate(explore_faces + [family_photos[2]]):
+        with cols[i % 6]:
+            st.markdown(f'<div class="legacy-img-container" style="border-radius: 50%;"><img src="{img}"></div>', unsafe_allow_html=True)
+    
+    st.markdown("#### Places")
+    cols = st.columns(4)
+    for i, img in enumerate(explore_places + [family_photos[0], site_photos[2]]):
+        with cols[i % 4]:
+            st.markdown(f'<div class="legacy-img-container" style="aspect-ratio: 16/9;"><img src="{img}"></div>', unsafe_allow_html=True)
+
+elif selected_nav == "👥 Sharing":
+    st.title("👥 Sharing")
+    st.markdown("Albums and photos shared with you.")
+    cols = st.columns(3)
+    with cols[0]:
+        st.markdown(f'<div class="legacy-img-container" style="aspect-ratio: 16/9; position: relative;"><img src="{family_photos[4]}"><div style="position: absolute; bottom: 10px; left: 10px; color: white; font-weight: bold; text-shadow: 1px 1px 3px black;">Family Vacation 2025</div></div>', unsafe_allow_html=True)
+    with cols[1]:
+        st.markdown(f'<div class="legacy-img-container" style="aspect-ratio: 16/9; position: relative;"><img src="{site_photos[5]}"><div style="position: absolute; bottom: 10px; left: 10px; color: white; font-weight: bold; text-shadow: 1px 1px 3px black;">Site Engineers (Madhapur)</div></div>', unsafe_allow_html=True)
+
+elif selected_nav == "📚 Albums":
+    st.title("📚 Albums")
+    st.markdown("Your collections.")
+    cols = st.columns(4)
+    albums = [
+        {"title": "Downloads", "img": document_photos[0]},
+        {"title": "Jubilee Hills Delivery", "img": site_photos[8]},
+        {"title": "WhatsApp Images", "img": family_photos[3]},
+        {"title": "Favorites", "img": family_photos[2]}
+    ]
+    for i, a in enumerate(albums):
+        with cols[i]:
+            st.markdown(f'<div class="legacy-img-container" style="border-radius: 12px;"><img src="{a["img"]}"></div><div style="font-weight: 500;">{a["title"]}</div><div style="font-size: 12px; color: gray;">{i*12 + 4} items</div>', unsafe_allow_html=True)
+
+elif selected_nav == "📄 Documents":
+    st.title("📄 Documents")
+    st.markdown("Automatically categorized receipts, notes, and lab reports.")
+    st.markdown("<h4 style='font-weight: 500; color:#202124; margin-top:20px;'>Receipts & Forms</h4>", unsafe_allow_html=True)
+    cols = st.columns(5)
+    for i, img in enumerate(document_photos):
+        with cols[i]:
+            st.markdown(f'<div class="legacy-img-container" style="aspect-ratio: 3/4;"><img src="{img}"></div>', unsafe_allow_html=True)
+
+elif selected_nav == "🗑️ Trash":
+    st.title("🗑️ Trash")
+    st.markdown("Items here will be permanently deleted after 60 days.")
+    cols = st.columns(6)
+    trash_items = [site_photos[1], family_photos[5], document_photos[1]]
+    for i, img in enumerate(trash_items):
+        with cols[i]:
+            st.markdown(f'<div class="legacy-img-container" style="opacity: 0.5; filter: grayscale(100%);"><img src="{img}"></div>', unsafe_allow_html=True)
 
