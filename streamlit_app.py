@@ -500,18 +500,13 @@ elif selected_nav == "🧭 Explore":
     }
     places_html = ''
     for place, name in places.items():
-        places_html += f"""
-        <div style="display:inline-block; margin-right: 16px; cursor: pointer; border-radius: 12px; overflow: hidden; width: 120px; height: 160px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-            <img src="{place}?auto=format&fit=crop&w=200&h=300&q=80" style="width: 100%; height: 100%; object-fit: cover;">
-            <div style="position: absolute; bottom: 8px; left: 8px; color: white; font-weight: 500; font-size: 14px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">{name}</div>
-        </div>
-        """
+        places_html += f'<div style="display:inline-block; margin-right: 16px; cursor: pointer; border-radius: 12px; overflow: hidden; width: 120px; height: 160px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"><img src="{place}?auto=format&fit=crop&w=200&h=300&q=80" style="width: 100%; height: 100%; object-fit: cover;"><div style="position: absolute; bottom: 8px; left: 8px; color: white; font-weight: 500; font-size: 14px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">{name}</div></div>'
     st.markdown(f"<div>{places_html}</div>", unsafe_allow_html=True)
     
     # Things
     st.markdown("<h5 style='color:#5f6368; margin-top: 40px; margin-bottom: 16px;'>Things</h5>", unsafe_allow_html=True)
     things = {
-        'https://images.unsplash.com/photo-1584308666744-24d5e4708709': 'Prescriptions',
+        'https://images.unsplash.com/photo-1631549916768-4119b2e5f926': 'Prescriptions',
         'https://images.unsplash.com/photo-1579684385127-1ef15d508118': 'Lab Reports',
         'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c': 'Receipts',
         'https://images.unsplash.com/photo-1504674900247-0877df9cc836': 'Food',
@@ -519,12 +514,7 @@ elif selected_nav == "🧭 Explore":
     }
     things_html = ''
     for thing, name in things.items():
-        things_html += f"""
-        <div style="display:inline-block; margin-right: 16px; margin-bottom: 16px; cursor: pointer; border-radius: 12px; overflow: hidden; width: 120px; height: 120px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-            <img src="{thing}?auto=format&fit=crop&w=200&h=200&q=80" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8);">
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: 500; font-size: 14px; text-align: center; text-shadow: 0 1px 3px rgba(0,0,0,0.9);">{name}</div>
-        </div>
-        """
+        things_html += f'<div style="display:inline-block; margin-right: 16px; margin-bottom: 16px; cursor: pointer; border-radius: 12px; overflow: hidden; width: 120px; height: 120px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"><img src="{thing}?auto=format&fit=crop&w=200&h=200&q=80" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8);"><div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: 500; font-size: 14px; text-align: center; text-shadow: 0 1px 3px rgba(0,0,0,0.9);">{name}</div></div>'
     st.markdown(f"<div>{things_html}</div>", unsafe_allow_html=True)
 
 else:
