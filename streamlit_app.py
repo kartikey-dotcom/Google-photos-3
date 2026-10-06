@@ -2,7 +2,7 @@ import streamlit as st
 
 st.set_page_config(layout="wide", page_title="Google Photos | Evidence Partition", initial_sidebar_state="expanded")
 
-# Inject Custom CSS to override Streamlit's default styling and match Google Photos Dark Mode
+# Inject Custom CSS to override Streamlit's default styling
 st.markdown("""
 <style>
     /* Global Dark Theme Settings */
@@ -22,13 +22,39 @@ st.markdown("""
         font-family: 'Google Sans', 'Roboto', sans-serif;
     }
     
-    /* Hide top header */
     header {visibility: hidden;}
     
-    /* Sidebar Styling */
     [data-testid="stSidebar"] {
         background-color: var(--sidebar-bg) !important;
         border-right: 1px solid var(--border);
+    }
+    
+    /* Interactive Sidebar Menu (Radio Overrides) */
+    [data-testid="stSidebar"] [data-testid="stRadio"] > div {
+        gap: 2px;
+    }
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] {
+        padding: 10px 16px 10px 16px !important;
+        border-radius: 0 20px 20px 0 !important;
+        margin-left: -1rem !important;
+        margin-right: 1rem !important;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"]:hover {
+        background-color: #3c4043 !important;
+    }
+    /* Hide the circular radio indicator */
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] > div:first-child {
+        display: none !important;
+    }
+    /* Style for Active/Checked item */
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] {
+        background-color: #4285f422 !important;
+    }
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] p {
+        color: #8ab4f8 !important;
+        font-weight: 600 !important;
     }
     
     /* Top Bar Search */
@@ -40,7 +66,6 @@ st.markdown("""
         margin-top: -60px;
         margin-bottom: 20px;
     }
-    
     .search-box {
         background-color: #303134;
         border-radius: 8px;
@@ -70,11 +95,6 @@ st.markdown("""
         align-items: center;
         gap: 6px;
     }
-    .chip.active {
-        background-color: #41331c;
-        border-color: #fbbc04;
-        color: #fbbc04;
-    }
     
     /* Evidence Cards */
     .evidence-card {
@@ -83,6 +103,11 @@ st.markdown("""
         border: 1px solid var(--border);
         overflow: hidden;
         margin-bottom: 20px;
+        transition: transform 0.2s;
+    }
+    .evidence-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.3);
     }
     .card-img-container {
         position: relative;
@@ -162,23 +187,26 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 1. SIDEBAR Navigation (Mocking Google Photos left menu)
+# 1. Interactive SIDEBAR Navigation
 with st.sidebar:
     st.markdown("### 💠 Google Photos <span style='background:#303134; padding:2px 6px; border-radius:4px; font-size:10px; border:1px solid #5f6368;'>Labs</span>", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("🖼️ Photos")
-    st.markdown("🧭 Explore")
-    st.markdown("👥 Sharing")
-    st.markdown("📚 Albums")
-    st.markdown("📄 Documents")
-    st.markdown("""
-    <div style="background-color: #4285f422; color: #8ab4f8; padding: 10px; border-radius: 0 20px 20px 0; margin-left: -1rem; margin-bottom: 8px; font-weight: 600;">
-        📁 Evidence Partition
-    </div>
-    """, unsafe_allow_html=True)
-    st.markdown("🗑️ Trash")
     
-    st.markdown("<br><br><br><br><br><br><br><br><br><br><br><br>", unsafe_allow_html=True)
+    # Interactive menu mapped to radio buttons, hidden circles via CSS
+    menu_options = [
+        "🖼️ Photos",
+        "🧭 Explore",
+        "👥 Sharing",
+        "📚 Albums",
+        "📄 Documents",
+        "📁 Evidence Partition",
+        "🗑️ Trash"
+    ]
+    
+    # Default to Evidence Partition
+    selected_nav = st.radio("Navigation", menu_options, index=5, label_visibility="collapsed")
+    
+    st.markdown("<br><br><br><br><br><br><br><br><br>", unsafe_allow_html=True)
     st.markdown("""
     <div style="background-color: #303134; padding: 16px; border-radius: 12px; font-size: 12px;">
         ☁️ <b>Storage Vault</b><br>
@@ -191,113 +219,117 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-# 2. TOP BAR
-st.markdown("""
-<div class="top-bar">
-    <div class="search-box">
-        🔍 LOT-GR-408 / SL-14
-        <span style="margin-left: auto; background-color: #41331c; color: #fbbc04; padding: 4px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #fbbc04;">✨ Evidence Lens: Active</span>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-# 3. FILTERS & METRICS
-st.markdown("""
-<div class="filter-row">
-    <div class="chip">📍 Nagarjuna Sagar Yard (May 2024) ✕</div>
-    <div class="chip">💠 Substrate: Rough Natural Stone ✕</div>
-    <div class="chip">✏️ Marking: Wax Grease Pencil</div>
-    <div class="chip">👁️ Overlays: Visible</div>
-</div>
-<div class="filter-row">
-    <div class="chip">⚡ 18ms latency</div>
-    <div class="chip">🛡️ Clean Verification</div>
-</div>
-<div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #3c4043; padding-bottom: 15px;">
-    <div>
-        <span style="background-color: #303134; color: #9aa0a6; padding: 8px 16px; border-radius: 16px 0 0 16px; border: 1px solid #3c4043; font-size: 13px;">🕘 Photos Legacy Mode</span><span style="background-color: #4285f444; color: #8ab4f8; padding: 8px 16px; border-radius: 0 16px 16px 0; border: 1px solid #8ab4f8; font-size: 13px;">✨ Evidence Lens Lab (Active)</span>
-    </div>
-    <div style="font-size: 12px; color: #9aa0a6;">
-        🔵 24 family photos from Himachal quarantined • 4 physical evidence assets verified
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-# 4. MAIN GALLERY
-st.markdown("<h4 style='font-weight: 500;'>Today • Sunday, Jun 2, 2024 <span style='font-size:12px; background:#303134; padding:4px 10px; border-radius:12px; margin-left:10px; color:#9aa0a6;'>Nagarjuna Sagar Field Site</span></h4>", unsafe_allow_html=True)
-
-# Cards Data based on mockup
-cards = [
-    {
-        "title": "LOT-GR-408 / SL-14 B-28",
-        "subtitle": "Rough Natural Travertine • 11:24 AM IST",
-        "tag": "TARGET",
-        "overlay1": "300mm Scale",
-        "overlay2": "Verified Match",
-        "img": "https://images.unsplash.com/photo-1618367588411-d9a90fefa880?auto=format&fit=crop&q=80&w=400&h=200",
-        "action": "👁️ Open in Inspector Lightbox",
-        "primary": True,
-        "score": "Parity 1.0"
-    },
-    {
-        "title": "STATUARIO-LOT-09",
-        "subtitle": "Polished Calacatta Bundle • May 28, 2024",
-        "tag": "REFERENCE",
-        "overlay1": "Polished Slab",
-        "overlay2": "Non-target",
-        "img": "https://images.unsplash.com/photo-1588805214470-381a1795db2c?auto=format&fit=crop&q=80&w=400&h=200",
-        "action": "↗️ View Differential",
-        "primary": False,
-        "score": "Non-match"
-    },
-    {
-        "title": "BLK-99 // SECT-04",
-        "subtitle": "Quarried Black Granite • Jun 2, 2024",
-        "tag": "QUARRY",
-        "overlay1": "Granite",
-        "overlay2": "Negative",
-        "img": "https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?auto=format&fit=crop&q=80&w=400&h=200",
-        "action": "📄 View Site Log",
-        "primary": False,
-        "score": "Negative"
-    },
-    {
-        "title": "BALAJI-CHALLAN-49102",
-        "subtitle": "Delivery Memo • 11:15 AM IST",
-        "tag": "DOCUMENT",
-        "overlay1": "Fiscal",
-        "overlay2": "Challan",
-        "img": "https://images.unsplash.com/photo-1618424181497-157f25b6ce7e?auto=format&fit=crop&q=80&w=400&h=200",
-        "action": "🔍 Cross-Ref Challan",
-        "primary": False,
-        "score": "Indexed"
-    }
-]
-
-cols = st.columns(4)
-
-for i, c in enumerate(cards):
-    with cols[i]:
-        action_class = "card-action primary" if c["primary"] else "card-action"
-        
-        html = f"""
-        <div class="evidence-card">
-            <div class="card-img-container">
-                <img src="{c['img']}">
-                <div class="card-tag">{c['tag']}</div>
-                <div class="card-overlay">
-                    <div class="overlay-pill">{c['overlay1']}</div>
-                    <div class="overlay-pill" style="color:#8ab4f8; border-color:#8ab4f8;">{c['overlay2']}</div>
-                </div>
-            </div>
-            <div class="card-content">
-                <div class="card-title">
-                    <span>{c['title']}</span>
-                    <span style="font-size:10px; background:#4285f422; color:#8ab4f8; padding:2px 6px; border-radius:4px;">{c['score']}</span>
-                </div>
-                <div class="card-subtitle">{c['subtitle']}</div>
-                <div class="{action_class}">{c['action']}</div>
-            </div>
+# Handle UI based on Interactive Selection
+if selected_nav == "📁 Evidence Partition":
+    # 2. TOP BAR
+    st.markdown("""
+    <div class="top-bar">
+        <div class="search-box">
+            🔍 LOT-GR-408 / SL-14
+            <span style="margin-left: auto; background-color: #41331c; color: #fbbc04; padding: 4px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #fbbc04;">✨ Evidence Lens: Active</span>
         </div>
-        """
-        st.markdown(html, unsafe_allow_html=True)
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # 3. FILTERS & METRICS
+    st.markdown("""
+    <div class="filter-row">
+        <div class="chip">📍 Nagarjuna Sagar Yard (May 2024) ✕</div>
+        <div class="chip">💠 Substrate: Rough Natural Stone ✕</div>
+        <div class="chip">✏️ Marking: Wax Grease Pencil</div>
+        <div class="chip">👁️ Overlays: Visible</div>
+    </div>
+    <div class="filter-row">
+        <div class="chip">⚡ 18ms latency</div>
+        <div class="chip">🛡️ Clean Verification</div>
+    </div>
+    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #3c4043; padding-bottom: 15px;">
+        <div>
+            <span style="background-color: #303134; color: #9aa0a6; padding: 8px 16px; border-radius: 16px 0 0 16px; border: 1px solid #3c4043; font-size: 13px;">🕘 Photos Legacy Mode</span><span style="background-color: #4285f444; color: #8ab4f8; padding: 8px 16px; border-radius: 0 16px 16px 0; border: 1px solid #8ab4f8; font-size: 13px;">✨ Evidence Lens Lab (Active)</span>
+        </div>
+        <div style="font-size: 12px; color: #9aa0a6;">
+            🔵 24 family photos from Himachal quarantined • 4 physical evidence assets verified
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # 4. MAIN GALLERY
+    st.markdown("<h4 style='font-weight: 500;'>Today • Sunday, Jun 2, 2024 <span style='font-size:12px; background:#303134; padding:4px 10px; border-radius:12px; margin-left:10px; color:#9aa0a6;'>Nagarjuna Sagar Field Site</span></h4>", unsafe_allow_html=True)
+    
+    cards = [
+        {
+            "title": "LOT-GR-408 / SL-14 B-28",
+            "subtitle": "Rough Natural Travertine • 11:24 AM IST",
+            "tag": "TARGET",
+            "overlay1": "300mm Scale",
+            "overlay2": "Verified Match",
+            "img": "https://images.unsplash.com/photo-1618367588411-d9a90fefa880?auto=format&fit=crop&q=80&w=400&h=200",
+            "action": "👁️ Inspector Lightbox",
+            "primary": True,
+            "score": "Parity 1.0"
+        },
+        {
+            "title": "STATUARIO-LOT-09",
+            "subtitle": "Polished Calacatta Bundle • May 28, 2024",
+            "tag": "REFERENCE",
+            "overlay1": "Polished Slab",
+            "overlay2": "Non-target",
+            "img": "https://images.unsplash.com/photo-1588805214470-381a1795db2c?auto=format&fit=crop&q=80&w=400&h=200",
+            "action": "↗️ Differential",
+            "primary": False,
+            "score": "Non-match"
+        },
+        {
+            "title": "BLK-99 // SECT-04",
+            "subtitle": "Quarried Black Granite • Jun 2, 2024",
+            "tag": "QUARRY",
+            "overlay1": "Granite",
+            "overlay2": "Negative",
+            "img": "https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?auto=format&fit=crop&q=80&w=400&h=200",
+            "action": "📄 View Site Log",
+            "primary": False,
+            "score": "Negative"
+        },
+        {
+            "title": "BALAJI-CHALLAN-49102",
+            "subtitle": "Delivery Memo • 11:15 AM IST",
+            "tag": "DOCUMENT",
+            "overlay1": "Fiscal",
+            "overlay2": "Challan",
+            "img": "https://images.unsplash.com/photo-1618424181497-157f25b6ce7e?auto=format&fit=crop&q=80&w=400&h=200",
+            "action": "🔍 Cross-Ref Challan",
+            "primary": False,
+            "score": "Indexed"
+        }
+    ]
+    
+    cols = st.columns(4)
+    
+    for i, c in enumerate(cards):
+        with cols[i]:
+            action_class = "card-action primary" if c["primary"] else "card-action"
+            
+            html = f"""
+            <div class="evidence-card">
+                <div class="card-img-container">
+                    <img src="{c['img']}">
+                    <div class="card-tag">{c['tag']}</div>
+                    <div class="card-overlay">
+                        <div class="overlay-pill">{c['overlay1']}</div>
+                        <div class="overlay-pill" style="color:#8ab4f8; border-color:#8ab4f8;">{c['overlay2']}</div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">
+                        <span>{c['title']}</span>
+                        <span style="font-size:10px; background:#4285f422; color:#8ab4f8; padding:2px 6px; border-radius:4px;">{c['score']}</span>
+                    </div>
+                    <div class="card-subtitle">{c['subtitle']}</div>
+                    <div class="{action_class}">{c['action']}</div>
+                </div>
+            </div>
+            """
+            st.markdown(html, unsafe_allow_html=True)
+else:
+    st.info(f"You selected **{selected_nav}**. This section is not part of the Evidence Lens MVP.")
+
