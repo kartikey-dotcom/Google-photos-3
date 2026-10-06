@@ -399,15 +399,10 @@ elif selected_nav == "🏥 Health Cabinet":
     st.markdown("<br>", unsafe_allow_html=True)
     
     # 2. Toggle Buttons Row (Directly below search bar)
-    col_query, col_mode1, col_mode2 = st.columns([5, 2, 2])
+    col_query, col_mode2 = st.columns([7, 2])
     with col_query:
         st.markdown('<div style="background-color:#f1f3f4; padding:6px 12px; border-radius:16px; color:#202124; font-size:14px; display:inline-block; border:1px solid #dadce0;">🔍 Metformin 500mg &nbsp; <span style="color:#5f6368; cursor:pointer;">✖</span></div>', unsafe_allow_html=True)
         
-    with col_mode1:
-        css = "toggle-active" if st.session_state.health_mode == "legacy" else ""
-        st.markdown(f'<div class="{css}" style="display:flex; justify-content:flex-end;">', unsafe_allow_html=True)
-        st.button("📸 Photos Legacy Search -8.2s delay", on_click=set_mode, args=("legacy",), use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
     with col_mode2:
         css = "toggle-active" if st.session_state.health_mode == "lens" else ""
         st.markdown(f'<div class="{css}" style="display:flex; justify-content:flex-end;">', unsafe_allow_html=True)
