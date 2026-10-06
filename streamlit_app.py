@@ -33,12 +33,25 @@ def handle_photos_search():
             st.session_state.search_query = "lab"
         elif "script" in q_lower or "rx" in q_lower or "doctor" in q_lower:
             st.session_state.search_query = "script"
-        elif "receipt" in q_lower or "invoice" in q_lower or "pharmacy" in q_lower:
+        elif "receipt" in q_lower or "invoice" in q_lower or "pharmacy" in q_lower or "bill" in q_lower:
             st.session_state.search_query = "receipt"
         else:
             st.session_state.search_query = "metformin"
         
         st.session_state.search_query_input = query
+
+def handle_hc_search():
+    query = st.session_state.search_query_input
+    if query:
+        q_lower = query.lower()
+        if "lab" in q_lower or "blood" in q_lower:
+            st.session_state.search_query = "lab"
+        elif "script" in q_lower or "rx" in q_lower or "doctor" in q_lower:
+            st.session_state.search_query = "script"
+        elif "receipt" in q_lower or "invoice" in q_lower or "pharmacy" in q_lower or "bill" in q_lower:
+            st.session_state.search_query = "receipt"
+        else:
+            st.session_state.search_query = "metformin"
 
 def set_search(q, display_val):
     st.session_state.search_query = q
@@ -444,7 +457,7 @@ elif selected_nav == "🏥 Health Cabinet":
     # 1. Global Search Bar & Health Cabinet Button Side-by-Side
     col_search, col_btn = st.columns([7, 2])
     with col_search:
-        st.text_input("Search", key="search_query_input", placeholder="🔍 Search your photos, albums, and health records...", label_visibility="collapsed")
+        st.text_input("Search", key="search_query_input", placeholder="🔍 Search your photos, albums, and health records...", label_visibility="collapsed", on_change=handle_hc_search)
         
     with col_btn:
         css = "toggle-active" if st.session_state.health_mode == "lens" else ""
