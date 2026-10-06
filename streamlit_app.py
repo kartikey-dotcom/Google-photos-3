@@ -119,6 +119,9 @@ st.markdown("""
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] > div:nth-child(1) { display: none !important; }
     
+    /* Hide the Health Cabinet item from the sidebar since it is now accessed via the main UI */
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"]:nth-child(6) { display: none !important; }
+    
     /* Inputs & Buttons */
     [data-testid="stTextInput"] div[data-baseweb="input"] {
         background-color: #f1f3f4;
