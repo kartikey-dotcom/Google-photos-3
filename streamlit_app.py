@@ -101,33 +101,6 @@ st.markdown("""
         border-color: #bdc1c6 !important;
     }
     
-    /* Main Area Horizontal Radio Toggle */
-    .main-toggle [data-testid="stRadio"] > div {
-        display: inline-flex;
-        background-color: #f1f3f4;
-        border-radius: 24px;
-        padding: 4px;
-        gap: 0px;
-        border: 1px solid var(--border);
-    }
-    .main-toggle [data-testid="stRadio"] label[data-baseweb="radio"] {
-        padding: 8px 16px !important;
-        border-radius: 20px !important;
-        margin: 0 !important;
-        cursor: pointer;
-        color: var(--text-muted) !important;
-    }
-    .main-toggle [data-testid="stRadio"] label[data-baseweb="radio"] > div:first-child {
-        display: none !important;
-    }
-    .main-toggle [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] {
-        background-color: #e8f0fe !important;
-    }
-    .main-toggle [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] p {
-        color: var(--accent) !important;
-        font-weight: 600 !important;
-    }
-    
     /* Evidence Cards */
     .evidence-card {
         background-color: var(--card-bg);
@@ -153,7 +126,7 @@ st.markdown("""
         object-fit: cover;
     }
     
-    /* Legacy Image Grid Container */
+    /* Legacy Image Grid Container for Sidebar Features */
     .legacy-img-container {
         width: 100%;
         aspect-ratio: 1;
@@ -295,19 +268,19 @@ with st.sidebar:
 
 # Core Data
 family_photos = [
-    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80", # Beach
-    "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=400&q=80", # Food
-    "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=400&q=80", # Dog
-    "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=400&q=80", # Kids
-    "https://images.unsplash.com/photo-1473496169904-658ba37448eb?auto=format&fit=crop&w=400&q=80", # Vacation
-    "https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?auto=format&fit=crop&w=400&q=80", # Party
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1473496169904-658ba37448eb?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?auto=format&fit=crop&w=400&q=80",
 ]
 
 document_photos = [
-    "https://images.unsplash.com/photo-1620577438165-22d7d8e20257?auto=format&fit=crop&w=400&q=80", # Receipt
-    "https://images.unsplash.com/photo-1555621805-4c07a51d9eb1?auto=format&fit=crop&w=400&q=80", # Doctors Note
-    "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=400&q=80", # Site Challan
-    "https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&w=400&q=80", # Site Certificate
+    "https://images.unsplash.com/photo-1620577438165-22d7d8e20257?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1555621805-4c07a51d9eb1?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&w=400&q=80",
 ]
 
 explore_faces = [
@@ -484,7 +457,6 @@ sections = [
     }
 ]
 
-# Extract all site images for legacy interleave
 site_photos = [c["img"] for s in sections for c in s["cards"]]
 
 
@@ -515,116 +487,69 @@ if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
         
     st.markdown("<br>", unsafe_allow_html=True)
     
-    default_mode_index = 1 if selected_nav == "📁 Evidence Partition" else 0
+    # Metrics Header
+    st.markdown('<div style="font-size: 12px; color: #5f6368; text-align: right; padding-top: 10px; border-bottom: 1px solid #dadce0; padding-bottom: 10px; margin-bottom: 20px;">⚡ 18ms latency | 🛡️ Clean Verification (0% Contamination)</div>', unsafe_allow_html=True)
     
-    col_toggle, col_stats = st.columns([2, 1])
-    with col_toggle:
-        st.markdown('<div class="main-toggle">', unsafe_allow_html=True)
-        view_mode = st.radio("Mode", ["🕘 Photos Legacy Mode", "✨ Evidence Lens Lab (Active)"], index=default_mode_index, horizontal=True, label_visibility="collapsed")
-        st.markdown('</div>', unsafe_allow_html=True)
-        
-    with col_stats:
-        if view_mode == "✨ Evidence Lens Lab (Active)":
-            st.markdown('<div style="font-size: 12px; color: #5f6368; text-align: right; padding-top: 10px;">⚡ 18ms latency | 🛡️ Clean Verification (0% Contamination)</div>', unsafe_allow_html=True)
+    st.info("🛡️ **24 domestic & family photos quarantined from work stream.** Analyzing site assets...")
+    
+    has_results = False
+    
+    for section in sections:
+        if st.session_state.search_query:
+            q = st.session_state.search_query.lower()
+            filtered_cards = [
+                c for c in section["cards"] 
+                if q in c["title"].lower() 
+                or q in c["tag"].lower() 
+                or q in c["subtitle"].lower()
+                or any(q in kw.lower() for kw in c.get("keywords", []))
+            ]
         else:
-            st.markdown('<div style="font-size: 12px; color: #5f6368; text-align: right; padding-top: 10px;">☁️ Synchronized with cloud</div>', unsafe_allow_html=True)
-    
-    st.markdown("<hr style='margin: 10px 0 20px 0;'>", unsafe_allow_html=True)
-    
-    if view_mode == "✨ Evidence Lens Lab (Active)":
-        
-        st.info("🛡️ **24 domestic & family photos quarantined from work stream.** Analyzing site assets...")
-        
-        has_results = False
-        
-        for section in sections:
-            if st.session_state.search_query:
-                q = st.session_state.search_query.lower()
-                filtered_cards = [
-                    c for c in section["cards"] 
-                    if q in c["title"].lower() 
-                    or q in c["tag"].lower() 
-                    or q in c["subtitle"].lower()
-                    or any(q in kw.lower() for kw in c.get("keywords", []))
-                ]
-            else:
-                filtered_cards = section["cards"]
-                
-            if filtered_cards:
-                has_results = True
-                st.markdown(f"<h4 style='font-weight: 500; color:#202124; margin-top:20px;'>{section['date_header']} <span style='font-size:12px; background:#f1f3f4; padding:4px 10px; border-radius:12px; margin-left:10px; color:#5f6368; border: 1px solid #dadce0;'>{section['location']}</span></h4>", unsafe_allow_html=True)
-                
-                cols = st.columns(4)
-                for i, c in enumerate(filtered_cards):
-                    with cols[i % 4]:
-                        action_class = "card-action primary" if c["primary"] else "card-action"
-                        
-                        bboxes_html = ""
-                        if "bboxes" in c:
-                            for bbox in c["bboxes"]:
-                                top = f"top: {bbox.get('top', 'auto')};"
-                                bottom = f"bottom: {bbox.get('bottom', 'auto')};"
-                                left = f"left: {bbox.get('left', 'auto')};"
-                                right = f"right: {bbox.get('right', 'auto')};"
-                                bboxes_html += f"""<div class="bbox {bbox['type']}" style="{top} {bottom} {left} {right}">{bbox['text']}</div>"""
-                        
-                        html = f"""
-                        <div class="evidence-card">
-                            <div class="card-img-container">
-                                <img src="{c['img']}">
-                                {bboxes_html}
-                                <div class="card-tag">{c['tag']}</div>
-                                <div class="card-overlay">
-                                    <div class="overlay-pill">{c['overlay1']}</div>
-                                    <div class="overlay-pill" style="color:#1a73e8; border-color:#8ab4f8;">{c['overlay2']}</div>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <div class="card-title">
-                                    <span>{c['title']}</span>
-                                    <span style="font-size:10px; background:#e8f0fe; color:#1a73e8; padding:2px 6px; border-radius:4px; font-weight:700;">{c['score']}</span>
-                                </div>
-                                <div class="card-subtitle">{c['subtitle']}</div>
-                                <div class="{action_class}">{c['action']}</div>
+            filtered_cards = section["cards"]
+            
+        if filtered_cards:
+            has_results = True
+            st.markdown(f"<h4 style='font-weight: 500; color:#202124; margin-top:20px;'>{section['date_header']} <span style='font-size:12px; background:#f1f3f4; padding:4px 10px; border-radius:12px; margin-left:10px; color:#5f6368; border: 1px solid #dadce0;'>{section['location']}</span></h4>", unsafe_allow_html=True)
+            
+            cols = st.columns(4)
+            for i, c in enumerate(filtered_cards):
+                with cols[i % 4]:
+                    action_class = "card-action primary" if c["primary"] else "card-action"
+                    
+                    bboxes_html = ""
+                    if "bboxes" in c:
+                        for bbox in c["bboxes"]:
+                            top = f"top: {bbox.get('top', 'auto')};"
+                            bottom = f"bottom: {bbox.get('bottom', 'auto')};"
+                            left = f"left: {bbox.get('left', 'auto')};"
+                            right = f"right: {bbox.get('right', 'auto')};"
+                            bboxes_html += f"""<div class="bbox {bbox['type']}" style="{top} {bottom} {left} {right}">{bbox['text']}</div>"""
+                    
+                    html = f"""
+                    <div class="evidence-card">
+                        <div class="card-img-container">
+                            <img src="{c['img']}">
+                            {bboxes_html}
+                            <div class="card-tag">{c['tag']}</div>
+                            <div class="card-overlay">
+                                <div class="overlay-pill">{c['overlay1']}</div>
+                                <div class="overlay-pill" style="color:#1a73e8; border-color:#8ab4f8;">{c['overlay2']}</div>
                             </div>
                         </div>
-                        """
-                        st.markdown(html, unsafe_allow_html=True)
-                        
-        if not has_results:
-            st.info(f"No evidence assets found matching '{st.session_state.search_query}'. Try searching for 'plumbing', 'stone', 'document', or 'concrete'.")
-            
-    else:
-        # LEGACY MODE
-        if st.session_state.search_query:
-            with st.spinner('Searching Google Photos...'):
-                time.sleep(4)
-            st.error("⚠️ **Cross-Domain Contamination: 50.0% (Personal media leaked)**")
-            
-            st.markdown("<h4 style='font-weight: 500; color:#202124;'>Search Results</h4>", unsafe_allow_html=True)
-            cols = st.columns(6)
-            mixed_results = [
-                family_photos[0], site_photos[0], family_photos[1], 
-                site_photos[1], family_photos[4], site_photos[4], 
-                family_photos[3], site_photos[8]
-            ]
-            for i, img_src in enumerate(mixed_results):
-                with cols[i % 6]:
-                    st.markdown(f'<div class="legacy-img-container"><img src="{img_src}"></div>', unsafe_allow_html=True)
-        else:
-            st.markdown("<h4 style='font-weight: 500; color:#202124;'>Yesterday</h4>", unsafe_allow_html=True)
-            cols = st.columns(6)
-            mixed_yesterday = [family_photos[0], family_photos[1], site_photos[0], site_photos[1], family_photos[2], family_photos[4]]
-            for i, img_src in enumerate(mixed_yesterday):
-                with cols[i % 6]:
-                    st.markdown(f'<div class="legacy-img-container"><img src="{img_src}"></div>', unsafe_allow_html=True)
-            
-            st.markdown("<h4 style='font-weight: 500; color:#202124;'>Last Week</h4>", unsafe_allow_html=True)
-            cols = st.columns(6)
-            mixed_last_week = [site_photos[4], site_photos[5], site_photos[6], site_photos[7], family_photos[3], family_photos[5]]
-            for i, img_src in enumerate(mixed_last_week):
-                with cols[i % 6]:
-                    st.markdown(f'<div class="legacy-img-container"><img src="{img_src}"></div>', unsafe_allow_html=True)
+                        <div class="card-content">
+                            <div class="card-title">
+                                <span>{c['title']}</span>
+                                <span style="font-size:10px; background:#e8f0fe; color:#1a73e8; padding:2px 6px; border-radius:4px; font-weight:700;">{c['score']}</span>
+                            </div>
+                            <div class="card-subtitle">{c['subtitle']}</div>
+                            <div class="{action_class}">{c['action']}</div>
+                        </div>
+                    </div>
+                    """
+                    st.markdown(html, unsafe_allow_html=True)
+                    
+    if not has_results:
+        st.info(f"No evidence assets found matching '{st.session_state.search_query}'. Try searching for 'plumbing', 'stone', 'document', or 'concrete'.")
 
 elif selected_nav == "🧭 Explore":
     st.title("🧭 Explore")
@@ -681,4 +606,3 @@ elif selected_nav == "🗑️ Trash":
     for i, img in enumerate(trash_items):
         with cols[i]:
             st.markdown(f'<div class="legacy-img-container" style="opacity: 0.5; filter: grayscale(100%);"><img src="{img}"></div>', unsafe_allow_html=True)
-
