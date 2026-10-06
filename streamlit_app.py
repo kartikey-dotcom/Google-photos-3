@@ -464,7 +464,32 @@ site_photos = [c["img"] for s in sections for c in s["cards"]]
 # UI RENDERING BASED ON SIDEBAR SELECTION
 # ==========================================
 
-if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
+if selected_nav == "🖼️ Photos":
+    st.markdown('<div style="background-color: #f1f3f4; border-radius: 24px; padding: 10px 16px; color: #5f6368; display: flex; align-items: center; gap: 8px;"><span style="font-size:18px;">🔍</span> Search your photos</div>', unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    st.markdown("<h4 style='font-weight: 500; color:#202124;'>Today</h4>", unsafe_allow_html=True)
+    cols = st.columns(4)
+    mixed_today = [site_photos[0], family_photos[0], site_photos[1], family_photos[1]]
+    for i, img in enumerate(mixed_today):
+        with cols[i]:
+            st.markdown(f'<div class="legacy-img-container" style="border-radius: 12px;"><img src="{img}"></div>', unsafe_allow_html=True)
+            
+    st.markdown("<h4 style='font-weight: 500; color:#202124;'>Yesterday</h4>", unsafe_allow_html=True)
+    cols = st.columns(4)
+    mixed_yesterday = [document_photos[0], site_photos[2], family_photos[2], site_photos[3]]
+    for i, img in enumerate(mixed_yesterday):
+        with cols[i]:
+            st.markdown(f'<div class="legacy-img-container" style="border-radius: 12px;"><img src="{img}"></div>', unsafe_allow_html=True)
+            
+    st.markdown("<h4 style='font-weight: 500; color:#202124;'>Last Week</h4>", unsafe_allow_html=True)
+    cols = st.columns(5)
+    mixed_last_week = [site_photos[4], site_photos[6], family_photos[4], site_photos[7], family_photos[5], document_photos[2], site_photos[8], document_photos[3], site_photos[9], site_photos[10]]
+    for i, img in enumerate(mixed_last_week):
+        with cols[i % 5]:
+            st.markdown(f'<div class="legacy-img-container" style="border-radius: 12px;"><img src="{img}"></div>', unsafe_allow_html=True)
+
+elif selected_nav == "📁 Evidence Partition":
     
     # 2. INTERACTIVE TOP BAR SEARCH
     col1, col2 = st.columns([5, 1])
