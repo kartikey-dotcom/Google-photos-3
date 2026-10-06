@@ -138,6 +138,32 @@ st.markdown("""
         height: 100%;
         object-fit: cover;
     }
+    
+    /* Bounding Boxes */
+    .bbox {
+        position: absolute;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 4px;
+        border-radius: 2px;
+        text-shadow: 0px 0px 2px rgba(0,0,0,0.8);
+    }
+    .bbox.red {
+        border: 2px solid #ea4335;
+        color: #ea4335;
+        background-color: rgba(234, 67, 53, 0.15);
+    }
+    .bbox.yellow {
+        border: 2px solid #fbbc04;
+        color: #fbbc04;
+        background-color: rgba(251, 188, 4, 0.15);
+    }
+    .bbox.blue {
+        border: 2px solid #4285f4;
+        color: #4285f4;
+        background-color: rgba(66, 133, 244, 0.15);
+    }
+    
     .card-tag {
         position: absolute;
         top: 10px;
@@ -238,12 +264,165 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
+# Dataset definition based on Unsplash high-res assets + Decoys
+sections = [
+    {
+        "date_header": "Today • Sunday, Jun 2, 2024",
+        "location": "Nagarjuna Sagar Field Site",
+        "cards": [
+            {
+                "title": "LOT-GR-408 / SL-14 B-28",
+                "subtitle": "Rough Natural Travertine • 11:24 AM IST",
+                "tag": "TARGET",
+                "overlay1": "300mm Scale",
+                "overlay2": "Verified Match",
+                "img": "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=800&q=80",
+                "action": "👁️ Inspector Lightbox",
+                "primary": True,
+                "score": "Parity 1.0",
+                "bboxes": [
+                    {"type": "red", "text": "LOT-GR-408 / SL-14 B-28", "top": "15%", "right": "5%"},
+                    {"type": "yellow", "text": "300mm Scale", "bottom": "35%", "left": "10%"}
+                ]
+            },
+            {
+                "title": "STATUARIO-LOT-09",
+                "subtitle": "Polished Calacatta Bundle • May 28, 2024",
+                "tag": "REFERENCE",
+                "overlay1": "Polished Slab",
+                "overlay2": "Non-target",
+                "img": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+                "action": "↗️ Differential",
+                "primary": False,
+                "score": "Non-match"
+            },
+            {
+                "title": "BLK-99 // SECT-04",
+                "subtitle": "Quarried Black Granite • Jun 2, 2024",
+                "tag": "QUARRY",
+                "overlay1": "Granite",
+                "overlay2": "Negative",
+                "img": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
+                "action": "📄 View Site Log",
+                "primary": False,
+                "score": "Negative"
+            },
+            {
+                "title": "BALAJI-CHALLAN-49102",
+                "subtitle": "Delivery Memo • 11:15 AM IST",
+                "tag": "DOCUMENT",
+                "overlay1": "Fiscal",
+                "overlay2": "Challan",
+                "img": "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=800&q=80",
+                "action": "🔍 Cross-Ref Challan",
+                "primary": False,
+                "score": "Indexed"
+            }
+        ]
+    },
+    {
+        "date_header": "Nov 8, 2025 • Jubilee Hills",
+        "location": "Villa 42 (Plumbing Offset)",
+        "cards": [
+            {
+                "title": "OFFSET 150mm -> VP 08/11",
+                "subtitle": "PVC Pipe Chase • 09:14 AM IST",
+                "tag": "TARGET",
+                "overlay1": "Substrate: Brick",
+                "overlay2": "OFFSET 150mm",
+                "img": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80",
+                "action": "👁️ Inspector Lightbox",
+                "primary": True,
+                "score": "Parity 1.0",
+                "bboxes": [
+                    {"type": "yellow", "text": "OFFSET 150mm -> VP 08/11", "top": "40%", "left": "20%"}
+                ]
+            },
+            {
+                "title": "ELEC-CONDUIT-11",
+                "subtitle": "Chased electrical conduit • 10:20 AM IST",
+                "tag": "DECOY",
+                "overlay1": "Substrate: Brick",
+                "overlay2": "Negative",
+                "img": "https://images.unsplash.com/photo-1541888946425-d0fbb186244f?auto=format&fit=crop&w=800&q=80",
+                "action": "📄 View Site Log",
+                "primary": False,
+                "score": "Negative"
+            },
+            {
+                "title": "SLAB-CORE-05",
+                "subtitle": "Sunken slab core cut • 11:05 AM IST",
+                "tag": "DECOY",
+                "overlay1": "Concrete",
+                "overlay2": "Negative",
+                "img": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80",
+                "action": "📄 View Site Log",
+                "primary": False,
+                "score": "Negative"
+            },
+            {
+                "title": "HVAC-HANGER-02",
+                "subtitle": "Ceiling HVAC hanger markings • 02:15 PM IST",
+                "tag": "DECOY",
+                "overlay1": "Concrete",
+                "overlay2": "Negative",
+                "img": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+                "action": "📄 View Site Log",
+                "primary": False,
+                "score": "Negative"
+            }
+        ]
+    },
+    {
+        "date_header": "Aug 18, 2025 • Madhapur Commercial",
+        "location": "M35 Lab Cube Report",
+        "cards": [
+            {
+                "title": "M35 GRADE 41.2 N/mm2",
+                "subtitle": "Lab test certificate • 04:30 PM IST",
+                "tag": "TARGET",
+                "overlay1": "A4 Certificate",
+                "overlay2": "M35 GRADE",
+                "img": "https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&w=800&q=80",
+                "action": "👁️ Inspector Lightbox",
+                "primary": True,
+                "score": "Parity 1.0",
+                "bboxes": [
+                    {"type": "blue", "text": "M35 GRADE 28 DAYS 41.2 N/mm2", "top": "50%", "left": "10%"}
+                ]
+            },
+            {
+                "title": "RMC-POUR-14",
+                "subtitle": "Transit concrete pour • 08:15 AM IST",
+                "tag": "DECOY",
+                "overlay1": "Concrete",
+                "overlay2": "Negative",
+                "img": "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80",
+                "action": "📄 View Site Log",
+                "primary": False,
+                "score": "Negative"
+            },
+            {
+                "title": "CUBE-TEST-01",
+                "subtitle": "Concrete test cubes on water tank • 09:00 AM IST",
+                "tag": "DECOY",
+                "overlay1": "Concrete",
+                "overlay2": "Negative",
+                "img": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
+                "action": "📄 View Site Log",
+                "primary": False,
+                "score": "Negative"
+            }
+        ]
+    }
+]
+
 # Handle UI based on Interactive Selection
 if selected_nav == "📁 Evidence Partition":
     # 2. INTERACTIVE TOP BAR SEARCH
     col1, col2 = st.columns([5, 1])
     with col1:
-        search_query = st.text_input("Search", value="", placeholder="🔍 e.g. LOT-GR-408 / SL-14 or STATUARIO", label_visibility="collapsed")
+        search_query = st.text_input("Search", value="", placeholder="🔍 e.g. LOT-GR-408 / SL-14 or OFFSET", label_visibility="collapsed")
     with col2:
         st.markdown('<div style="background-color: #fef7e0; color: #b06000; padding: 6px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #fbbc04; font-weight: 600; text-align: center; margin-top: 2px;">✨ Evidence Lens: Active</div>', unsafe_allow_html=True)
     
@@ -272,98 +451,75 @@ if selected_nav == "📁 Evidence Partition":
         st.markdown('</div>', unsafe_allow_html=True)
         
     with col_stats:
-        st.markdown('<div style="font-size: 12px; color: #5f6368; text-align: right; padding-top: 10px;">🔵 24 family photos quarantined • 4 evidence assets verified</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 12px; color: #5f6368; text-align: right; padding-top: 10px;">🔵 64 items streamed • Zero semantic leakage</div>', unsafe_allow_html=True)
     
     st.markdown("<hr style='margin: 10px 0 20px 0;'>", unsafe_allow_html=True)
     
     if view_mode == "✨ Evidence Lens Lab (Active)":
-        # 4. MAIN GALLERY (Interactive)
-        st.markdown("<h4 style='font-weight: 500; color:#202124;'>Today • Sunday, Jun 2, 2024 <span style='font-size:12px; background:#f1f3f4; padding:4px 10px; border-radius:12px; margin-left:10px; color:#5f6368; border: 1px solid #dadce0;'>Nagarjuna Sagar Field Site</span></h4>", unsafe_allow_html=True)
         
-        all_cards = [
-            {
-                "title": "LOT-GR-408 / SL-14 B-28",
-                "subtitle": "Rough Natural Travertine • 11:24 AM IST",
-                "tag": "TARGET",
-                "overlay1": "300mm Scale",
-                "overlay2": "Verified Match",
-                "img": "https://images.unsplash.com/photo-1618367588411-d9a90fefa880?auto=format&fit=crop&q=80&w=400&h=200",
-                "action": "👁️ Inspector Lightbox",
-                "primary": True,
-                "score": "Parity 1.0"
-            },
-            {
-                "title": "STATUARIO-LOT-09",
-                "subtitle": "Polished Calacatta Bundle • May 28, 2024",
-                "tag": "REFERENCE",
-                "overlay1": "Polished Slab",
-                "overlay2": "Non-target",
-                "img": "https://images.unsplash.com/photo-1588805214470-381a1795db2c?auto=format&fit=crop&q=80&w=400&h=200",
-                "action": "↗️ Differential",
-                "primary": False,
-                "score": "Non-match"
-            },
-            {
-                "title": "BLK-99 // SECT-04",
-                "subtitle": "Quarried Black Granite • Jun 2, 2024",
-                "tag": "QUARRY",
-                "overlay1": "Granite",
-                "overlay2": "Negative",
-                "img": "https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?auto=format&fit=crop&q=80&w=400&h=200",
-                "action": "📄 View Site Log",
-                "primary": False,
-                "score": "Negative"
-            },
-            {
-                "title": "BALAJI-CHALLAN-49102",
-                "subtitle": "Delivery Memo • 11:15 AM IST",
-                "tag": "DOCUMENT",
-                "overlay1": "Fiscal",
-                "overlay2": "Challan",
-                "img": "https://images.unsplash.com/photo-1618424181497-157f25b6ce7e?auto=format&fit=crop&q=80&w=400&h=200",
-                "action": "🔍 Cross-Ref Challan",
-                "primary": False,
-                "score": "Indexed"
-            }
-        ]
+        has_results = False
         
-        # Interactive Filtering Logic
-        if search_query:
-            filtered_cards = [c for c in all_cards if search_query.lower() in c["title"].lower() or search_query.lower() in c["tag"].lower()]
-        else:
-            filtered_cards = all_cards
+        for section in sections:
+            # Filter cards for this section
+            if search_query:
+                filtered_cards = [c for c in section["cards"] if search_query.lower() in c["title"].lower() or search_query.lower() in c["tag"].lower()]
+            else:
+                filtered_cards = section["cards"]
+                
+            if filtered_cards:
+                has_results = True
+                
+                # Render Section Header
+                st.markdown(f"<h4 style='font-weight: 500; color:#202124; margin-top:20px;'>{section['date_header']} <span style='font-size:12px; background:#f1f3f4; padding:4px 10px; border-radius:12px; margin-left:10px; color:#5f6368; border: 1px solid #dadce0;'>{section['location']}</span></h4>", unsafe_allow_html=True)
+                
+                # Render Cards
+                cols = st.columns(4)
+                for i, c in enumerate(filtered_cards):
+                    with cols[i % 4]:
+                        action_class = "card-action primary" if c["primary"] else "card-action"
+                        
+                        bboxes_html = ""
+                        if "bboxes" in c:
+                            for bbox in c["bboxes"]:
+                                top = f"top: {bbox.get('top', 'auto')};"
+                                bottom = f"bottom: {bbox.get('bottom', 'auto')};"
+                                left = f"left: {bbox.get('left', 'auto')};"
+                                right = f"right: {bbox.get('right', 'auto')};"
+                                bboxes_html += f"""<div class="bbox {bbox['type']}" style="{top} {bottom} {left} {right}">{bbox['text']}</div>"""
+                        
+                        html = f"""
+                        <div class="evidence-card">
+                            <div class="card-img-container">
+                                <img src="{c['img']}">
+                                {bboxes_html}
+                                <div class="card-tag">{c['tag']}</div>
+                                <div class="card-overlay">
+                                    <div class="overlay-pill">{c['overlay1']}</div>
+                                    <div class="overlay-pill" style="color:#1a73e8; border-color:#8ab4f8;">{c['overlay2']}</div>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-title">
+                                    <span>{c['title']}</span>
+                                    <span style="font-size:10px; background:#e8f0fe; color:#1a73e8; padding:2px 6px; border-radius:4px; font-weight:700;">{c['score']}</span>
+                                </div>
+                                <div class="card-subtitle">{c['subtitle']}</div>
+                                <div class="{action_class}">{c['action']}</div>
+                            </div>
+                        </div>
+                        """
+                        st.markdown(html, unsafe_allow_html=True)
+                        
+        if not has_results:
+            st.info(f"No evidence assets found matching '{search_query}'. Try searching for 'LOT-GR', 'OFFSET', or 'M35'.")
             
-        if not filtered_cards:
-            st.info(f"No evidence assets found matching '{search_query}'. Try 'LOT-GR-408' or 'DOCUMENT'.")
-        else:
-            cols = st.columns(4)
-            for i, c in enumerate(filtered_cards):
-                with cols[i % 4]:
-                    action_class = "card-action primary" if c["primary"] else "card-action"
-                    
-                    html = f"""
-                    <div class="evidence-card">
-                        <div class="card-img-container">
-                            <img src="{c['img']}">
-                            <div class="card-tag">{c['tag']}</div>
-                            <div class="card-overlay">
-                                <div class="overlay-pill">{c['overlay1']}</div>
-                                <div class="overlay-pill" style="color:#1a73e8; border-color:#8ab4f8;">{c['overlay2']}</div>
-                            </div>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-title">
-                                <span>{c['title']}</span>
-                                <span style="font-size:10px; background:#e8f0fe; color:#1a73e8; padding:2px 6px; border-radius:4px; font-weight:700;">{c['score']}</span>
-                            </div>
-                            <div class="card-subtitle">{c['subtitle']}</div>
-                            <div class="{action_class}">{c['action']}</div>
-                        </div>
-                    </div>
-                    """
-                    st.markdown(html, unsafe_allow_html=True)
     else:
-        st.warning("⚠️ Legacy Mode active. Professional indexing disabled. 14 minutes estimated to find assets manually.")
+        st.error("⚠️ Legacy Mode active. Professional indexing disabled. Expect high contamination from domestic photos and 14+ minutes to find technical assets manually via pinch-to-zoom.")
+        st.markdown("**(Simulated Legacy Cloud Search Results)**")
+        cols = st.columns(5)
+        for i in range(5):
+            with cols[i]:
+                st.image("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=150&h=150", caption="Beach_Vacation.jpg")
 else:
     st.info(f"You selected **{selected_nav}**. This section is not part of the Evidence Lens MVP.")
 
