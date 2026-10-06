@@ -543,10 +543,16 @@ if selected_nav == "🖼️ Photos":
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("<h4 style='font-weight: 500; color:#202124;'>Timeline</h4>", unsafe_allow_html=True)
     cols = st.columns(4)
-    mixed = family_photos + [c['img'] for s in health_sections for c in s['cards']]
+    clinical_imgs = [c['img'] for s in health_sections for c in s['cards']]
+    mixed = family_photos.copy()
     import random
     random.seed(42)
     random.shuffle(mixed)
+    # Inject clinical images into the top row to visually prove the clutter!
+    mixed.insert(1, clinical_imgs[0]) # Metformin foil
+    mixed.insert(5, clinical_imgs[3]) # Receipt
+    mixed.insert(7, clinical_imgs[10]) # Ibuprofen script
+    mixed.extend([img for img in clinical_imgs if img not in (clinical_imgs[0], clinical_imgs[3], clinical_imgs[10])])
     for i, img in enumerate(mixed):
         with cols[i % 4]:
             st.markdown(f'<div class="legacy-img-container"><img src="{img}"></div>', unsafe_allow_html=True)
