@@ -54,14 +54,14 @@ st.markdown("""
 <style>
     /* Global Dark Theme Settings */
     :root {
-        --bg-color: #202124;
-        --sidebar-bg: #202124;
-        --text-main: #e8eaed;
-        --text-muted: #9aa0a6;
-        --accent: #8ab4f8;
-        --border: #3c4043;
-        --card-bg: #303134;
-        --hover-bg: #3c4043;
+        --bg-color: #ffffff;
+        --sidebar-bg: #ffffff;
+        --text-main: #202124;
+        --text-muted: #5f6368;
+        --accent: #1a73e8;
+        --border: #dadce0;
+        --card-bg: #ffffff;
+        --hover-bg: #f1f3f4;
     }
     
     .stApp {
@@ -91,17 +91,17 @@ st.markdown("""
     }
     /* Highlight for Health Cabinet */
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] {
-        background-color: #394457 !important;
+        background-color: #e8f0fe !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] p {
-        color: #d2e3fc !important;
+        color: #1a73e8 !important;
         font-weight: 600 !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] > div:nth-child(1) { display: none !important; }
     
     /* Inputs & Buttons */
     [data-testid="stTextInput"] div[data-baseweb="input"] {
-        background-color: #303134;
+        background-color: #f1f3f4;
         border-radius: 24px;
         border: 1px solid transparent;
         color: var(--text-main);
@@ -109,7 +109,7 @@ st.markdown("""
     [data-testid="stButton"] button {
         border-radius: 16px !important;
         padding: 4px 16px !important;
-        background-color: #303134 !important;
+        background-color: #ffffff !important;
         border: 1px solid var(--border) !important;
         color: var(--text-muted) !important;
         font-size: 13px !important;
@@ -122,9 +122,9 @@ st.markdown("""
     
     /* Active Toggle Button */
     .toggle-active > button {
-        background-color: #394457 !important;
+        background-color: #e8f0fe !important;
         border-color: #8ab4f8 !important;
-        color: #d2e3fc !important;
+        color: #1a73e8 !important;
     }
     
     /* Cards */
@@ -188,8 +188,8 @@ st.markdown("""
         position: absolute;
         top: 40px;
         left: 10px;
-        background-color: rgba(32,33,36,0.9);
-        color: #e8eaed;
+        background-color: rgba(255,255,255,0.9);
+        color: #202124;
         padding: 4px 8px;
         border-radius: 12px;
         font-size: 10px;
@@ -204,8 +204,8 @@ st.markdown("""
         gap: 8px;
     }
     .overlay-pill {
-        background-color: rgba(32,33,36,0.9);
-        color: #e8eaed;
+        background-color: rgba(255,255,255,0.9);
+        color: #202124;
         padding: 4px 10px;
         border-radius: 12px;
         font-size: 11px;
@@ -226,7 +226,7 @@ st.markdown("""
 
 # 1. SIDEBAR Navigation
 with st.sidebar:
-    st.markdown("### 💠 Photos <span style='background:#303134; color:#9aa0a6; padding:2px 6px; border-radius:4px; font-size:10px;'>Labs</span>", unsafe_allow_html=True)
+    st.markdown("### 💠 Photos <span style='background:#f1f3f4; color:#5f6368; padding:2px 6px; border-radius:4px; font-size:10px;'>Labs</span>", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
     
     menu_options = [
@@ -242,10 +242,10 @@ with st.sidebar:
     
     st.markdown("<br><br><br><br><br>", unsafe_allow_html=True)
     st.markdown("""
-    <div style="padding: 16px; border-radius: 12px; font-size: 12px; border: 1px solid #3c4043;">
-        <span style="color:#e8eaed; font-weight: 600;">👥 Caregiver Sharing</span><br>
-        <span style="color:#9aa0a6;">Dr. Sarah Chen, Mark D.</span><br>
-        <div style="margin-top: 8px; color:#8ab4f8; cursor:pointer;">Manage Access</div>
+    <div style="padding: 16px; border-radius: 12px; font-size: 12px; border: 1px solid #dadce0;">
+        <span style="color:#202124; font-weight: 600;">👥 Caregiver Sharing</span><br>
+        <span style="color:#5f6368;">Dr. Sarah Chen, Mark D.</span><br>
+        <div style="margin-top: 8px; color:#1a73e8; cursor:pointer;">Manage Access</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -380,9 +380,9 @@ if st.session_state.selected_card:
 
 # Rendering
 if selected_nav == "🖼️ Photos":
-    st.markdown('<div style="background-color: #303134; border-radius: 24px; padding: 10px 16px; color: #9aa0a6; display: flex; align-items: center; gap: 8px;"><span style="font-size:18px;">🔍</span> Search your photos, albums, and health records</div>', unsafe_allow_html=True)
+    st.markdown('<div style="background-color: #f1f3f4; border-radius: 24px; padding: 10px 16px; color: #9aa0a6; display: flex; align-items: center; gap: 8px;"><span style="font-size:18px;">🔍</span> Search your photos, albums, and health records</div>', unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("<h4 style='font-weight: 500; color:#e8eaed;'>Timeline</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='font-weight: 500; color:#202124;'>Timeline</h4>", unsafe_allow_html=True)
     cols = st.columns(4)
     mixed = family_photos + [c['img'] for s in health_sections for c in s['cards']]
     import random
@@ -425,7 +425,7 @@ elif selected_nav == "🏥 Health Cabinet":
         st.info("🛡️ **18 personal & family photos quarantined** from clinical stream • 8 clinical health records isolated & authenticated")
         
         for section in health_sections:
-            st.markdown(f"<h4 style='font-weight: 500; color:#e8eaed; margin-top:20px;'>{section['date_header']}</h4>", unsafe_allow_html=True)
+            st.markdown(f"<h4 style='font-weight: 500; color:#202124; margin-top:20px;'>{section['date_header']}</h4>", unsafe_allow_html=True)
             cols = st.columns(4)
             for i, c in enumerate(section["cards"]):
                 with cols[i % 4]:
@@ -449,7 +449,7 @@ elif selected_nav == "🏥 Health Cabinet":
                             <div class="card-tag">{c['tag']}</div>
                             <div class="card-overlay">
                                 <div class="overlay-pill">{c['overlay1']}</div>
-                                <div class="overlay-pill" style="color:#8ab4f8; border-color:#8ab4f8;">{c['overlay2']}</div>
+                                <div class="overlay-pill" style="color:#1a73e8; border-color:#1a73e8;">{c['overlay2']}</div>
                             </div>
                         </div>
                         <div class="card-content">
@@ -466,7 +466,7 @@ elif selected_nav == "🏥 Health Cabinet":
         st.markdown('<div style="font-size: 12px; color: #9aa0a6; padding-bottom: 10px; margin-bottom: 20px;"><span style="background: rgba(242,139,130,0.1); color: #f28b82; padding: 4px 8px; border-radius: 12px;">⏱️ 4,200ms latency</span> &nbsp; <span style="background: rgba(242,139,130,0.1); color: #f28b82; padding: 4px 8px; border-radius: 12px;">⚠️ 48.0% Personal Contamination</span> &nbsp; <span style="background: rgba(242,139,130,0.1); color: #f28b82; padding: 4px 8px; border-radius: 12px;">No Exact Entity Match</span></div>', unsafe_allow_html=True)
         st.warning("Showing 12 unranked results for search • Personal family media and food snapshots included")
         
-        st.markdown(f"<h4 style='font-weight: 500; color:#e8eaed; margin-top:20px;'>Search Results</h4>", unsafe_allow_html=True)
+        st.markdown(f"<h4 style='font-weight: 500; color:#202124; margin-top:20px;'>Search Results</h4>", unsafe_allow_html=True)
         cols = st.columns(4)
         
         mixed = [health_sections[0]['cards'][0]['img'], family_photos[0], family_photos[1], health_sections[0]['cards'][1]['img'], family_photos[2], health_sections[0]['cards'][2]['img'], family_photos[3], health_sections[1]['cards'][0]['img']]
