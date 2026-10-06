@@ -21,8 +21,9 @@ def set_mode(mode):
         else:
             st.session_state.is_loading = False
 
-def set_search(q):
+def set_search(q, display_val):
     st.session_state.search_query = q
+    st.session_state.search_query_input = display_val
 
 def open_lightbox(card_title):
     st.session_state.selected_card = card_title
@@ -403,10 +404,7 @@ elif selected_nav == "🏥 Health Cabinet":
     # 2. Toggle Buttons Row (Directly below search bar)
     col_query, col_mode2 = st.columns([7, 2])
     with col_query:
-        if query:
-            st.markdown(f'<div style="background-color:#f1f3f4; padding:6px 12px; border-radius:16px; color:#202124; font-size:14px; display:inline-block; border:1px solid #dadce0;">🔍 {display_query} &nbsp; <span style="color:#5f6368; cursor:pointer;">✖</span></div>', unsafe_allow_html=True)
-        else:
-            st.empty()
+        st.empty()
         
     with col_mode2:
         css = "toggle-active" if st.session_state.health_mode == "lens" else ""
@@ -418,10 +416,10 @@ elif selected_nav == "🏥 Health Cabinet":
     
     # 3. Filter Chips Row
     c1, c2, c3, c4, c5 = st.columns([1.2, 1.2, 1.2, 1.2, 3])
-    c1.button("💊 Substrate: Silver Foil", on_click=set_search, args=("metformin",))
-    c2.button("✍️ Rx Doctor Script", on_click=set_search, args=("script",))
-    c3.button("🩸 Lab Blood Reports", on_click=set_search, args=("lab",))
-    c4.button("🧾 Pharmacy Receipts", on_click=set_search, args=("receipt",))
+    c1.button("💊 Substrate: Silver Foil", on_click=set_search, args=("metformin", "Metformin 500mg"))
+    c2.button("✍️ Rx Doctor Script", on_click=set_search, args=("script", "Rx Doctor Script"))
+    c3.button("🩸 Lab Blood Reports", on_click=set_search, args=("lab", "Lab Blood Reports"))
+    c4.button("🧾 Pharmacy Receipts", on_click=set_search, args=("receipt", "Pharmacy Receipts"))
     
     st.markdown("<br>", unsafe_allow_html=True)
     
