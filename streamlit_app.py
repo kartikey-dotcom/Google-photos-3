@@ -240,14 +240,7 @@ with st.sidebar:
     ]
     selected_nav = st.radio("Navigation", menu_options, index=5, label_visibility="collapsed")
     
-    st.markdown("<br><br><br><br><br>", unsafe_allow_html=True)
-    st.markdown("""
-    <div style="padding: 16px; border-radius: 12px; font-size: 12px; border: 1px solid #dadce0;">
-        <span style="color:#202124; font-weight: 600;">👥 Caregiver Sharing</span><br>
-        <span style="color:#5f6368;">Dr. Sarah Chen, Mark D.</span><br>
-        <div style="margin-top: 8px; color:#1a73e8; cursor:pointer;">Manage Access</div>
-    </div>
-    """, unsafe_allow_html=True)
+
 
 # Data
 family_photos = [
