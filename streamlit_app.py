@@ -398,10 +398,22 @@ elif selected_nav == "🏥 Health Cabinet":
     st.text_input("Search", key="search_query_input", placeholder="🔍 Search your photos, albums, and health records...", label_visibility="collapsed")
     st.markdown("<br>", unsafe_allow_html=True)
     
+    query = st.session_state.get('search_query', 'metformin')
+    query_map = {
+        'metformin': 'Metformin 500mg',
+        'script': 'Rx Doctor Script',
+        'lab': 'Lab Blood Reports',
+        'receipt': 'Pharmacy Receipts'
+    }
+    display_query = query_map.get(query, query)
+    
     # 2. Toggle Buttons Row (Directly below search bar)
     col_query, col_mode2 = st.columns([7, 2])
     with col_query:
-        st.markdown('<div style="background-color:#f1f3f4; padding:6px 12px; border-radius:16px; color:#202124; font-size:14px; display:inline-block; border:1px solid #dadce0;">🔍 Metformin 500mg &nbsp; <span style="color:#5f6368; cursor:pointer;">✖</span></div>', unsafe_allow_html=True)
+        if query:
+            st.markdown(f'<div style="background-color:#f1f3f4; padding:6px 12px; border-radius:16px; color:#202124; font-size:14px; display:inline-block; border:1px solid #dadce0;">🔍 {display_query} &nbsp; <span style="color:#5f6368; cursor:pointer;">✖</span></div>', unsafe_allow_html=True)
+        else:
+            st.empty()
         
     with col_mode2:
         css = "toggle-active" if st.session_state.health_mode == "lens" else ""
@@ -425,9 +437,22 @@ elif selected_nav == "🏥 Health Cabinet":
         st.info("🛡️ **18 personal & family photos quarantined** from clinical stream • 8 clinical health records isolated & authenticated")
         
         for section in health_sections:
+            filtered_cards = section["cards"]
+            if query == "metformin":
+                filtered_cards = [c for c in filtered_cards if "metformin" in c["title"].lower() or "metformin" in c.get("tag","").lower()]
+            elif query == "script":
+                filtered_cards = [c for c in filtered_cards if "rx" in c["title"].lower() or "script" in c.get("overlay1","").lower()]
+            elif query == "lab":
+                filtered_cards = [c for c in filtered_cards if "lab" in c["title"].lower() or "panel" in c["title"].lower()]
+            elif query == "receipt":
+                filtered_cards = [c for c in filtered_cards if "receipt" in c.get("overlay1","").lower() or "invoice" in c["title"].lower()]
+                
+            if not filtered_cards:
+                continue
+                
             st.markdown(f"<h4 style='font-weight: 500; color:#202124; margin-top:20px;'>{section['date_header']}</h4>", unsafe_allow_html=True)
             cols = st.columns(4)
-            for i, c in enumerate(section["cards"]):
+            for i, c in enumerate(filtered_cards):
                 with cols[i % 4]:
                     bboxes_html = ""
                     for bbox in c.get("bboxes", []):
