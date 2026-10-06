@@ -262,7 +262,7 @@ st.markdown("""
 
 # 1. SIDEBAR Navigation
 with st.sidebar:
-    st.markdown("### 💠 Google Photos <span style='background:#f1f3f4; color:#5f6368; padding:2px 6px; border-radius:4px; font-size:10px; vertical-align: middle;'>Labs</span>", unsafe_allow_html=True)
+    st.markdown("### 💠 Google Photos", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
     
     menu_options = [
