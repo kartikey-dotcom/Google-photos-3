@@ -328,6 +328,7 @@ sections = [
                 "action": "👁️ Inspector Lightbox",
                 "primary": True,
                 "score": "Parity 1.0",
+                "keywords": ["stone", "slab", "travertine", "rock", "yard", "marble", "rough", "construction", "material"],
                 "bboxes": [
                     {"type": "red", "text": "LOT-GR-408 / SL-14 B-28", "top": "15%", "right": "5%"},
                     {"type": "yellow", "text": "300mm Scale", "bottom": "35%", "left": "10%"}
@@ -342,7 +343,8 @@ sections = [
                 "img": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
                 "action": "↗️ Differential",
                 "primary": False,
-                "score": "Non-match"
+                "score": "Non-match",
+                "keywords": ["stone", "marble", "white", "polished", "slab", "statuario", "warehouse", "quartz"]
             },
             {
                 "title": "BLK-99 // SECT-04",
@@ -353,7 +355,8 @@ sections = [
                 "img": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
                 "action": "📄 View Site Log",
                 "primary": False,
-                "score": "Negative"
+                "score": "Negative",
+                "keywords": ["granite", "black", "block", "quarry", "stone", "rock", "raw", "heavy"]
             },
             {
                 "title": "BALAJI-CHALLAN-49102",
@@ -364,7 +367,8 @@ sections = [
                 "img": "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=800&q=80",
                 "action": "🔍 Cross-Ref Challan",
                 "primary": False,
-                "score": "Indexed"
+                "score": "Indexed",
+                "keywords": ["document", "paper", "receipt", "challan", "invoice", "memo", "delivery", "slip", "bill"]
             }
         ]
     },
@@ -382,6 +386,7 @@ sections = [
                 "action": "👁️ Inspector Lightbox",
                 "primary": True,
                 "score": "Parity 1.0",
+                "keywords": ["pipe", "plumbing", "pvc", "brick", "wall", "rough-in", "measurement", "tape", "offset", "water", "plumber"],
                 "bboxes": [
                     {"type": "yellow", "text": "OFFSET 150mm -> VP 08/11", "top": "40%", "left": "20%"}
                 ]
@@ -395,7 +400,8 @@ sections = [
                 "img": "https://images.unsplash.com/photo-1541888946425-d0fbb186244f?auto=format&fit=crop&w=800&q=80",
                 "action": "📄 View Site Log",
                 "primary": False,
-                "score": "Negative"
+                "score": "Negative",
+                "keywords": ["electrical", "wire", "conduit", "brick", "wall", "chase", "piping", "electrician"]
             },
             {
                 "title": "SLAB-CORE-05",
@@ -406,7 +412,8 @@ sections = [
                 "img": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80",
                 "action": "📄 View Site Log",
                 "primary": False,
-                "score": "Negative"
+                "score": "Negative",
+                "keywords": ["core", "cut", "hole", "concrete", "slab", "floor", "drill"]
             },
             {
                 "title": "HVAC-HANGER-02",
@@ -417,7 +424,8 @@ sections = [
                 "img": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
                 "action": "📄 View Site Log",
                 "primary": False,
-                "score": "Negative"
+                "score": "Negative",
+                "keywords": ["hvac", "ceiling", "hanger", "duct", "concrete", "markings", "vent"]
             }
         ]
     },
@@ -435,6 +443,7 @@ sections = [
                 "action": "👁️ Inspector Lightbox",
                 "primary": True,
                 "score": "Parity 1.0",
+                "keywords": ["document", "paper", "report", "certificate", "lab", "test", "m35", "concrete", "grade", "seal", "stamp", "quality"],
                 "bboxes": [
                     {"type": "blue", "text": "M35 GRADE 28 DAYS 41.2 N/mm2", "top": "50%", "left": "10%"}
                 ]
@@ -448,7 +457,8 @@ sections = [
                 "img": "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80",
                 "action": "📄 View Site Log",
                 "primary": False,
-                "score": "Negative"
+                "score": "Negative",
+                "keywords": ["concrete", "pour", "truck", "transit", "rmc", "site", "cement", "mixer"]
             },
             {
                 "title": "CUBE-TEST-01",
@@ -459,7 +469,8 @@ sections = [
                 "img": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
                 "action": "📄 View Site Log",
                 "primary": False,
-                "score": "Negative"
+                "score": "Negative",
+                "keywords": ["concrete", "cube", "test", "water", "curing", "tank", "cement", "sample"]
             }
         ]
     }
@@ -478,9 +489,9 @@ if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
     # 2. INTERACTIVE TOP BAR SEARCH
     col1, col2 = st.columns([5, 1])
     with col1:
-        search_query = st.text_input("Search", value="", placeholder="🔍 e.g. 'Travertine slab', 'Plumbing offset', or 'LOT-GR-408'", label_visibility="collapsed")
+        search_query = st.text_input("Search", value="", placeholder="🔍 Try searching: 'plumbing', 'stone slab', 'concrete', 'certificate', or 'pipe'", label_visibility="collapsed")
     with col2:
-        if search_query and "LOT" in search_query.upper():
+        if search_query:
             st.markdown('<div style="background-color: #fef7e0; color: #b06000; padding: 6px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #fbbc04; font-weight: 600; text-align: center; margin-top: 2px;">✨ Evidence Lens: Active</div>', unsafe_allow_html=True)
         else:
             st.markdown('<div style="background-color: #f1f3f4; color: #5f6368; padding: 6px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #dadce0; font-weight: 600; text-align: center; margin-top: 2px;">✨ Evidence Lens</div>', unsafe_allow_html=True)
@@ -511,7 +522,14 @@ if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
         
         for section in sections:
             if search_query:
-                filtered_cards = [c for c in section["cards"] if search_query.lower() in c["title"].lower() or search_query.lower() in c["tag"].lower() or search_query.lower() in c["subtitle"].lower()]
+                q = search_query.lower()
+                filtered_cards = [
+                    c for c in section["cards"] 
+                    if q in c["title"].lower() 
+                    or q in c["tag"].lower() 
+                    or q in c["subtitle"].lower()
+                    or any(q in kw.lower() for kw in c.get("keywords", []))
+                ]
             else:
                 filtered_cards = section["cards"]
                 
@@ -557,7 +575,7 @@ if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
                         st.markdown(html, unsafe_allow_html=True)
                         
         if not has_results:
-            st.info(f"No evidence assets found matching '{search_query}'. Try searching for 'LOT-GR', 'OFFSET', or 'M35'.")
+            st.info(f"No evidence assets found matching '{search_query}'. Try searching for 'plumbing', 'stone', 'document', or 'concrete'.")
             
     else:
         # LEGACY MODE
