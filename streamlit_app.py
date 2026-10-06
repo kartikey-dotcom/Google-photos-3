@@ -12,8 +12,6 @@ if "is_loading" not in st.session_state:
     st.session_state.is_loading = False
 if "selected_card" not in st.session_state:
     st.session_state.selected_card = None
-if "show_pharmacist_mode" not in st.session_state:
-    st.session_state.show_pharmacist_mode = False
 
 def set_mode(mode):
     if st.session_state.health_mode != mode:
@@ -28,41 +26,6 @@ def set_search(q):
 
 def open_lightbox(card_title):
     st.session_state.selected_card = card_title
-
-def open_quick_scan():
-    st.session_state.show_pharmacist_mode = True
-
-@st.dialog("Pharmacist Quick-Scan Mode", width="large")
-def show_pharmacist_modal():
-    cols = st.columns([3, 2])
-    with cols[0]:
-        st.image("https://images.unsplash.com/photo-1584308666744-24d5e4708709?auto=format&fit=crop&w=1200&q=100", use_column_width=True)
-    with cols[1]:
-        st.markdown("<h2 style='color:#1a73e8; margin-bottom:0;'>METFORMIN 500MG ER</h2>", unsafe_allow_html=True)
-        st.markdown("<h4 style='color:#5f6368; margin-top:0;'>Hydrochloride Extended Release</h4>", unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<b>Prescribing Doctor:</b> Dr. R. Mehta", unsafe_allow_html=True)
-        st.markdown("<b>Clinic:</b> Apollo Health Pharmacy Dispense", unsafe_allow_html=True)
-        st.markdown("<b>Date of Issue:</b> Oct 28, 2024", unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div style="background:#f1f3f4; padding:12px; border-radius:8px; border:1px solid #dadce0;">
-            <div style="font-size:12px; color:#5f6368;">Extracted Batch / License</div>
-            <div style="font-size:18px; font-weight:700; font-family:monospace; color:#202124; display:flex; justify-content:space-between; align-items:center;">
-                LOT: 4B391
-                <span style="font-size:14px; background:#ffffff; border:1px solid #dadce0; padding:4px 8px; border-radius:4px; cursor:pointer;">📋 Copy</span>
-            </div>
-            <div style="font-size:18px; font-weight:700; font-family:monospace; color:#202124; display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-                EXP: 11/2025
-                <span style="font-size:14px; background:#ffffff; border:1px solid #dadce0; padding:4px 8px; border-radius:4px; cursor:pointer;">📋 Copy</span>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        
-    if st.button("Close Quick-Scan", use_container_width=True):
-        st.session_state.show_pharmacist_mode = False
-        st.rerun()
 
 @st.dialog("Clinical Info Panel", width="large")
 def show_lightbox(c):
@@ -86,10 +49,10 @@ if st.session_state.is_loading:
         time.sleep(4.0)
     st.session_state.is_loading = False
 
-# Inject Custom CSS (Light Theme MD3 + Zoom logic)
+# Inject Custom CSS (Dark Theme MD3)
 st.markdown("""
 <style>
-    /* Global Light Theme Settings */
+    /* Global Dark Theme Settings */
     :root {
         --bg-color: #ffffff;
         --sidebar-bg: #ffffff;
@@ -157,39 +120,6 @@ st.markdown("""
         color: var(--text-main) !important;
     }
     
-    /* Action Dock */
-    .action-dock {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        width: calc(100% - 244px);
-        background-color: #ffffff;
-        border-top: 1px solid #dadce0;
-        padding: 16px 32px;
-        z-index: 999;
-        box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    @media (max-width: 768px) {
-        .action-dock { width: 100%; }
-    }
-    
-    /* Primary Dock Button */
-    .btn-primary {
-        background-color: #1a73e8 !important;
-        color: #ffffff !important;
-        border: none !important;
-        padding: 8px 24px !important;
-        border-radius: 20px !important;
-        font-weight: 600 !important;
-    }
-    .btn-primary:hover {
-        background-color: #1765cc !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    }
-    
     /* Active Toggle Button */
     .toggle-active > button {
         background-color: #e8f0fe !important;
@@ -210,8 +140,7 @@ st.markdown("""
         position: relative;
         height: 180px;
         width: 100%;
-        background-color: #e0e0e0;
-        overflow: hidden;
+        background-color: #000;
     }
     .card-img-container img {
         width: 100%;
@@ -219,42 +148,18 @@ st.markdown("""
         object-fit: cover;
     }
     
-    /* Macro Zoom Class */
-    .macro-zoom > img {
-        transform: scale(2.5) translate(0%, -5%);
-        transform-origin: center;
-        filter: contrast(1.1) sharpen(1.2);
-    }
-    
-    .mini-map {
+    /* Bounding Boxes */
+    .bbox {
         position: absolute;
-        bottom: 10px;
-        right: 10px;
-        width: 44px;
-        height: 44px;
-        border: 2px solid #ffffff;
-        border-radius: 4px;
-        background-color: #000;
-        overflow: hidden;
-        z-index: 10;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 4px;
+        border-radius: 2px;
+        text-shadow: 0px 0px 2px rgba(0,0,0,0.8);
     }
-    .mini-map img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0.8;
-    }
-    .mini-map-indicator {
-        position: absolute;
-        top: 35%;
-        left: 40%;
-        width: 25%;
-        height: 25%;
-        border: 1px solid #34a853;
-        box-shadow: 0 0 6px #34a853;
-        background-color: rgba(52, 168, 83, 0.4);
-    }
+    .bbox.red { border: 2px solid #f28b82; color: #f28b82; background-color: rgba(242, 139, 130, 0.15); }
+    .bbox.yellow { border: 2px solid #fde293; color: #fde293; background-color: rgba(253, 226, 147, 0.15); }
+    .bbox.blue { border: 2px solid #aecbfa; color: #aecbfa; background-color: rgba(174, 203, 250, 0.15); }
     
     /* Hover Actions (Checkmark and Star) */
     .card-hover-actions {
@@ -265,11 +170,10 @@ st.markdown("""
         justify-content: space-between;
         padding: 0 10px;
         opacity: 0.8;
-        z-index: 15;
     }
     .hover-icon {
-        background: rgba(255,255,255,0.9);
-        color: #5f6368;
+        background: rgba(0,0,0,0.6);
+        color: white;
         border-radius: 50%;
         width: 24px;
         height: 24px;
@@ -277,8 +181,7 @@ st.markdown("""
         align-items: center;
         justify-content: center;
         font-size: 12px;
-        border: 1px solid #dadce0;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255,255,255,0.3);
     }
     
     .card-tag {
@@ -292,39 +195,32 @@ st.markdown("""
         font-size: 10px;
         font-weight: 700;
         border: 1px solid var(--border);
-        z-index: 15;
     }
     .card-overlay {
         position: absolute;
         bottom: 10px;
         left: 10px;
         display: flex;
-        flex-direction: column;
-        gap: 6px;
-        z-index: 15;
-        align-items: flex-start;
+        gap: 8px;
     }
     .overlay-pill {
-        background-color: rgba(255,255,255,0.95);
+        background-color: rgba(255,255,255,0.9);
         color: #202124;
         padding: 4px 10px;
         border-radius: 12px;
         font-size: 11px;
-        font-weight: 600;
+        font-weight: 500;
         border: 1px solid var(--border);
-        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
     
     .card-content { padding: 16px; }
     .card-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; color: var(--text-main); }
     .card-subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+    .verified-pill { font-size: 11px; color: var(--accent); background: rgba(138,180,248,0.1); padding: 4px 8px; border-radius: 12px; display: inline-block; }
     
     /* Legacy Simple Grid */
     .legacy-img-container { width: 100%; aspect-ratio: 16/9; overflow: hidden; margin-bottom: 20px; border-radius: 12px; }
     .legacy-img-container img { width: 100%; height: 100%; object-fit: cover; }
-    
-    /* Hide bottom padding so dock doesnt overlay text */
-    .block-container { padding-bottom: 100px !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -349,7 +245,7 @@ with st.sidebar:
     <div style="padding: 16px; border-radius: 12px; font-size: 12px; border: 1px solid #dadce0;">
         <span style="color:#202124; font-weight: 600;">👥 Caregiver Sharing</span><br>
         <span style="color:#5f6368;">Dr. Sarah Chen, Mark D.</span><br>
-        <div style="margin-top: 8px; color:#1a73e8; cursor:pointer; font-weight:600;">Manage Access</div>
+        <div style="margin-top: 8px; color:#1a73e8; cursor:pointer;">Manage Access</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -363,13 +259,6 @@ family_photos = [
     "https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?auto=format&fit=crop&w=400&q=80",
 ]
 
-legacy_decoys = [
-    "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=400&q=80", # Birthday Cake
-    "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80", # Grocery produce/receipt
-    "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=400&q=80", # Blurred Dog
-    "https://images.unsplash.com/photo-1519331379826-f10be5486c6f?auto=format&fit=crop&w=400&q=80"  # Outdoor Park
-]
-
 health_sections = [
     {
         "date_header": "October 2024 • Recent Clinical Records & Prescriptions",
@@ -378,14 +267,14 @@ health_sections = [
                 "title": "Metformin HCl 500mg",
                 "subtitle": "Oct 28, 2024 • Apollo Pharmacy Dispense",
                 "tag": "METFORMIN 500MG ER",
-                "overlay1": "Verified Salt: Metformin HCl ER",
-                "overlay1_color": "#1a73e8",
-                "overlay2": "Exp: Nov 2025",
+                "overlay1": "Substrate: Silver Foil",
+                "overlay2": "Lot: 4B391",
                 "img": "https://images.unsplash.com/photo-1584308666744-24d5e4708709?auto=format&fit=crop&w=800&q=80",
-                "verified": "● Active Refill (30 Days)",
-                "verified_color": "#0f9d58",
-                "verified_bg": "#e6f4ea",
-                "macro": True,
+                "verified": "Verified Salt: Metformin HCl",
+                "bboxes": [
+                    {"type": "blue", "text": "METFORMIN 500MG ER", "top": "25%", "left": "15%"},
+                    {"type": "red", "text": "Exp: 11/2025", "bottom": "20%", "right": "10%"}
+                ],
                 "dialog": {
                     "drug": "Metformin Hydrochloride Extended Release",
                     "strength": "500mg",
@@ -398,14 +287,11 @@ health_sections = [
                 "title": "Hypertension Rx (Telmisartan)",
                 "subtitle": "Oct 14, 2024 • Dr. A. R. Khan (Cardiology)",
                 "tag": "TELMISARTAN 40MG",
-                "overlay1": "Verified Salt: Telmisartan 40mg",
-                "overlay1_color": "#1a73e8",
+                "overlay1": "Substrate: Doctor Script",
                 "overlay2": "1 Tab Daily OD",
                 "img": "https://images.unsplash.com/photo-1583324113626-70df0f4deaab?auto=format&fit=crop&w=800&q=80",
-                "verified": "● Active Refill (30 Days)",
-                "verified_color": "#0f9d58",
-                "verified_bg": "#e6f4ea",
-                "macro": True,
+                "verified": "Verified Seal: City Hospital",
+                "bboxes": [{"type": "yellow", "text": "Telmisartan 40mg (OD)", "top": "40%", "left": "25%"}],
                 "dialog": {"drug": "Telmisartan", "strength": "40mg", "prescriber": "Dr. A. R. Khan", "substrate": "Handwritten Script", "batch": "N/A"}
             },
             {
@@ -413,14 +299,10 @@ health_sections = [
                 "subtitle": "Oct 26, 2024 • Metropolis Healthcare Labs",
                 "tag": "HBA1C: 7.2% (ELEVATED)",
                 "overlay1": "Substrate: Lab Report",
-                "overlay2": "⚠️ High: Above Target (4.0-5.6%)",
-                "overlay2_color": "#b06000",
-                "overlay2_bg": "#fef7e0",
+                "overlay2": "Range: 4.0-5.6%",
                 "img": "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80",
                 "verified": "Metropolis Healthcare Labs",
-                "verified_color": "#5f6368",
-                "verified_bg": "#f1f3f4",
-                "macro": False,
+                "bboxes": [{"type": "red", "text": "HbA1c: 7.2%", "top": "50%", "left": "30%"}],
                 "dialog": {"drug": "Diagnostic Blood Panel", "strength": "N/A", "prescriber": "Dr. Sarah Chen", "substrate": "A4 Print with Blue Seal", "batch": "SID: 8849201"}
             },
             {
@@ -428,12 +310,10 @@ health_sections = [
                 "subtitle": "Oct 16, 2024 • Total $65.03 Paid",
                 "tag": "CITY DRUG PHARMACY",
                 "overlay1": "Substrate: Thermal Paper",
-                "overlay2": "Non-Prescription Cash Receipt ($65.03)",
+                "overlay2": "4 Meds Listed",
                 "img": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80",
                 "verified": "Fiscal Non-Clinical Slip",
-                "verified_color": "#5f6368",
-                "verified_bg": "#f1f3f4",
-                "macro": False,
+                "bboxes": [{"type": "blue", "text": "Total: $65.03", "bottom": "15%", "right": "20%"}],
                 "dialog": {"drug": "Multiple (Fiscal)", "strength": "N/A", "prescriber": "N/A", "substrate": "Thermal Receipt", "batch": "Trans: #4928"}
             }
         ]
@@ -449,9 +329,7 @@ health_sections = [
                 "overlay2": "Normal Range",
                 "img": "https://images.unsplash.com/photo-1638202993928-7267aad84c31?auto=format&fit=crop&w=800&q=80",
                 "verified": "Verified Seal: City Lab",
-                "verified_color": "#5f6368",
-                "verified_bg": "#f1f3f4",
-                "macro": False,
+                "bboxes": [{"type": "yellow", "text": "WBC: 6.8", "top": "30%", "left": "40%"}],
                 "dialog": {"drug": "CBC Panel", "strength": "N/A", "prescriber": "Self", "substrate": "A4 Print", "batch": "SID: 77391"}
             },
             {
@@ -462,9 +340,7 @@ health_sections = [
                 "overlay2": "Euthyroid",
                 "img": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80",
                 "verified": "Verified Seal: City Lab",
-                "verified_color": "#5f6368",
-                "verified_bg": "#f1f3f4",
-                "macro": False,
+                "bboxes": [{"type": "blue", "text": "TSH: 2.1", "top": "40%", "left": "20%"}],
                 "dialog": {"drug": "Thyroid Panel", "strength": "N/A", "prescriber": "Self", "substrate": "A4 Print", "batch": "SID: 77391"}
             },
             {
@@ -475,9 +351,7 @@ health_sections = [
                 "overlay2": "Stable",
                 "img": "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=800&q=80",
                 "verified": "Verified Signature",
-                "verified_color": "#5f6368",
-                "verified_bg": "#f1f3f4",
-                "macro": False,
+                "bboxes": [{"type": "red", "text": "BP: 120/80", "top": "60%", "left": "50%"}],
                 "dialog": {"drug": "Clinical Note", "strength": "N/A", "prescriber": "Dr. A. R. Khan", "substrate": "Handwritten Note", "batch": "N/A"}
             },
             {
@@ -488,9 +362,7 @@ health_sections = [
                 "overlay2": "Administered",
                 "img": "https://images.unsplash.com/photo-1605289982774-9a6fef564df8?auto=format&fit=crop&w=800&q=80",
                 "verified": "Apex Clinic",
-                "verified_color": "#5f6368",
-                "verified_bg": "#f1f3f4",
-                "macro": False,
+                "bboxes": [{"type": "yellow", "text": "FluZone 0.5mL", "bottom": "40%", "left": "20%"}],
                 "dialog": {"drug": "FluZone Quadrivalent", "strength": "0.5mL", "prescriber": "Apex Clinic Staff", "substrate": "Printed Cardstock", "batch": "Lot: 9942Z"}
             }
         ]
@@ -505,16 +377,14 @@ if st.session_state.selected_card:
                 show_lightbox(c)
                 st.session_state.selected_card = None
 
-if st.session_state.show_pharmacist_mode:
-    show_pharmacist_modal()
 
 # Rendering
 if selected_nav == "🖼️ Photos":
-    st.markdown('<div style="background-color: #f1f3f4; border-radius: 24px; padding: 10px 16px; color: #5f6368; display: flex; align-items: center; gap: 8px;"><span style="font-size:18px;">🔍</span> Search your photos, albums, and health records</div>', unsafe_allow_html=True)
+    st.markdown('<div style="background-color: #f1f3f4; border-radius: 24px; padding: 10px 16px; color: #9aa0a6; display: flex; align-items: center; gap: 8px;"><span style="font-size:18px;">🔍</span> Search your photos, albums, and health records</div>', unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("<h4 style='font-weight: 500; color:#202124;'>Timeline</h4>", unsafe_allow_html=True)
     cols = st.columns(4)
-    mixed = family_photos + legacy_decoys + [c['img'] for s in health_sections for c in s['cards']]
+    mixed = family_photos + [c['img'] for s in health_sections for c in s['cards']]
     import random
     random.seed(42)
     random.shuffle(mixed)
@@ -551,7 +421,7 @@ elif selected_nav == "🏥 Health Cabinet":
     st.markdown("<br>", unsafe_allow_html=True)
     
     if st.session_state.health_mode == "lens":
-        st.markdown('<div style="font-size: 12px; color: #5f6368; padding-bottom: 10px; margin-bottom: 20px;"><span style="background: rgba(26,115,232,0.1); color: #1a73e8; padding: 4px 8px; border-radius: 12px;">⚡ 22ms Latency</span> &nbsp; <span style="background: rgba(26,115,232,0.1); color: #1a73e8; padding: 4px 8px; border-radius: 12px;">🛡️ 0% Clutter Leakage</span> &nbsp; <span style="background: rgba(26,115,232,0.1); color: #1a73e8; padding: 4px 8px; border-radius: 12px;">🎯 Match: Clinical Records</span></div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 12px; color: #9aa0a6; padding-bottom: 10px; margin-bottom: 20px;"><span style="background: rgba(138,180,248,0.1); color: #8ab4f8; padding: 4px 8px; border-radius: 12px;">⚡ 22ms Latency</span> &nbsp; <span style="background: rgba(138,180,248,0.1); color: #8ab4f8; padding: 4px 8px; border-radius: 12px;">🛡️ 0% Clutter Leakage</span> &nbsp; <span style="background: rgba(138,180,248,0.1); color: #8ab4f8; padding: 4px 8px; border-radius: 12px;">🎯 Match: Clinical Records</span></div>', unsafe_allow_html=True)
         st.info("🛡️ **18 personal & family photos quarantined** from clinical stream • 8 clinical health records isolated & authenticated")
         
         for section in health_sections:
@@ -559,74 +429,47 @@ elif selected_nav == "🏥 Health Cabinet":
             cols = st.columns(4)
             for i, c in enumerate(section["cards"]):
                 with cols[i % 4]:
-                    # Macro Zoom Logic
-                    macro_class = "macro-zoom" if c.get("macro") else ""
-                    minimap_html = ""
-                    if c.get("macro"):
-                        minimap_html = f"""
-                        <div class="mini-map">
-                            <img src="{c['img']}">
-                            <div class="mini-map-indicator"></div>
-                        </div>
-                        """
-                        
-                    # Overlay Logic
-                    c1_bg = c.get("overlay1_bg", "rgba(255,255,255,0.95)")
-                    c1_col = c.get("overlay1_color", "#202124")
-                    c2_bg = c.get("overlay2_bg", "rgba(255,255,255,0.95)")
-                    c2_col = c.get("overlay2_color", "#202124")
+                    bboxes_html = ""
+                    for bbox in c.get("bboxes", []):
+                        top = f"top: {bbox.get('top', 'auto')};"
+                        bottom = f"bottom: {bbox.get('bottom', 'auto')};"
+                        left = f"left: {bbox.get('left', 'auto')};"
+                        right = f"right: {bbox.get('right', 'auto')};"
+                        bboxes_html += f"""<div class="bbox {bbox['type']}" style="{top} {bottom} {left} {right}">{bbox['text']}</div>"""
                     
                     st.markdown(f"""
                     <div class="evidence-card">
-                        <div class="card-img-container {macro_class}">
+                        <div class="card-img-container">
                             <img src="{c['img']}">
-                            {minimap_html}
+                            {bboxes_html}
                             <div class="card-hover-actions">
                                 <div class="hover-icon">✔️</div>
                                 <div class="hover-icon">⭐</div>
                             </div>
                             <div class="card-tag">{c['tag']}</div>
                             <div class="card-overlay">
-                                <div class="overlay-pill" style="color:{c1_col}; background:{c1_bg};">{c['overlay1']}</div>
-                                <div class="overlay-pill" style="color:{c2_col}; background:{c2_bg};">{c['overlay2']}</div>
+                                <div class="overlay-pill">{c['overlay1']}</div>
+                                <div class="overlay-pill" style="color:#1a73e8; border-color:#1a73e8;">{c['overlay2']}</div>
                             </div>
                         </div>
                         <div class="card-content">
                             <div class="card-title">{c['title']}</div>
                             <div class="card-subtitle">{c['subtitle']}</div>
-                            <div style="font-size: 11px; font-weight: 600; color: {c['verified_color']}; background: {c['verified_bg']}; padding: 4px 8px; border-radius: 12px; display: inline-block; margin-bottom: 12px;">{c['verified']}</div>
+                            <div class="verified-pill">✔️ {c['verified']}</div>
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
                     st.button("🔍 Open Lightbox", key=f"btn_{c['title']}", on_click=open_lightbox, args=(c['title'],), use_container_width=True)
 
-        # Bottom Dock for Actions
-        st.markdown("""
-        <div class="action-dock">
-            <div style="font-weight: 600; color: #202124;">Selected Evidence: 2 Items Ready for Pharmacist Review</div>
-        </div>
-        """, unsafe_allow_html=True)
-        # We overlay buttons by using a container positioned absolutely via css hack, or just render it inline.
-        # Since Streamlit makes fixed positioning of interactive widgets hard, we'll just render it at the bottom.
-        st.markdown("<hr>", unsafe_allow_html=True)
-        col1, col2, col3 = st.columns([4, 2, 2])
-        with col1:
-            st.markdown("<div style='padding-top:10px; font-weight:600; font-size:16px; color:#202124;'>Selected Evidence: 2 Items Ready for Pharmacist Review</div>", unsafe_allow_html=True)
-        with col2:
-            st.button("Share Caregiver Summary", use_container_width=True)
-        with col3:
-            st.button("⚡ Show Pharmacist Quick-Scan Mode", type="primary", use_container_width=True, on_click=open_quick_scan)
-
     else:
         # Legacy Mode (Failure State)
-        st.markdown('<div style="font-size: 12px; color: #5f6368; padding-bottom: 10px; margin-bottom: 20px;"><span style="background: rgba(242,139,130,0.1); color: #d93025; padding: 4px 8px; border-radius: 12px;">⏱️ 4,200ms latency</span> &nbsp; <span style="background: rgba(242,139,130,0.1); color: #d93025; padding: 4px 8px; border-radius: 12px;">⚠️ 50.0% Personal Media Leakage</span> &nbsp; <span style="background: rgba(242,139,130,0.1); color: #d93025; padding: 4px 8px; border-radius: 12px;">Standard Wide Framing (No Macro OCR)</span></div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 12px; color: #9aa0a6; padding-bottom: 10px; margin-bottom: 20px;"><span style="background: rgba(242,139,130,0.1); color: #f28b82; padding: 4px 8px; border-radius: 12px;">⏱️ 4,200ms latency</span> &nbsp; <span style="background: rgba(242,139,130,0.1); color: #f28b82; padding: 4px 8px; border-radius: 12px;">⚠️ 48.0% Personal Contamination</span> &nbsp; <span style="background: rgba(242,139,130,0.1); color: #f28b82; padding: 4px 8px; border-radius: 12px;">No Exact Entity Match</span></div>', unsafe_allow_html=True)
         st.warning("Showing 12 unranked results for search • Personal family media and food snapshots included")
         
         st.markdown(f"<h4 style='font-weight: 500; color:#202124; margin-top:20px;'>Search Results</h4>", unsafe_allow_html=True)
         cols = st.columns(4)
         
-        # Inject the 4 requested decoys in the top row explicitly
-        mixed = legacy_decoys + [health_sections[0]['cards'][0]['img'], family_photos[0], health_sections[0]['cards'][1]['img'], health_sections[1]['cards'][0]['img']]
+        mixed = [health_sections[0]['cards'][0]['img'], family_photos[0], family_photos[1], health_sections[0]['cards'][1]['img'], family_photos[2], health_sections[0]['cards'][2]['img'], family_photos[3], health_sections[1]['cards'][0]['img']]
         for i, img in enumerate(mixed):
             with cols[i % 4]:
                 st.markdown(f'<div class="legacy-img-container"><img src="{img}"></div>', unsafe_allow_html=True)
