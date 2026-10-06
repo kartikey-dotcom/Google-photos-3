@@ -394,30 +394,35 @@ if selected_nav == "🖼️ Photos":
 
 elif selected_nav == "🏥 Health Cabinet":
     
-    # Search and Toggle Bar
+    # 1. Global Search Bar
     st.text_input("Search", key="search_query_input", placeholder="🔍 Search your photos, albums, and health records...", label_visibility="collapsed")
-    
     st.markdown("<br>", unsafe_allow_html=True)
     
-    col_chips, col_mode1, col_mode2 = st.columns([5, 1.5, 1.5])
-    with col_chips:
-        c1, c2, c3, c4 = st.columns(4)
-        c1.button("💊 Substrate: Silver Foil", on_click=set_search, args=("metformin",))
-        c2.button("✍️ Rx Doctor Script", on_click=set_search, args=("script",))
-        c3.button("🩸 Lab Blood Reports", on_click=set_search, args=("lab",))
-        c4.button("🧾 Pharmacy Receipts", on_click=set_search, args=("receipt",))
+    # 2. Toggle Buttons Row (Directly below search bar)
+    col_query, col_mode1, col_mode2 = st.columns([5, 2, 2])
+    with col_query:
+        st.markdown('<div style="background-color:#f1f3f4; padding:6px 12px; border-radius:16px; color:#202124; font-size:14px; display:inline-block; border:1px solid #dadce0;">🔍 Metformin 500mg &nbsp; <span style="color:#5f6368; cursor:pointer;">✖</span></div>', unsafe_allow_html=True)
         
     with col_mode1:
         css = "toggle-active" if st.session_state.health_mode == "legacy" else ""
-        st.markdown(f'<div class="{css}">', unsafe_allow_html=True)
-        st.button("📸 Photos Legacy Search -8.2s delay", on_click=set_mode, args=("legacy",))
+        st.markdown(f'<div class="{css}" style="display:flex; justify-content:flex-end;">', unsafe_allow_html=True)
+        st.button("📸 Photos Legacy Search -8.2s delay", on_click=set_mode, args=("legacy",), use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
     with col_mode2:
         css = "toggle-active" if st.session_state.health_mode == "lens" else ""
-        st.markdown(f'<div class="{css}">', unsafe_allow_html=True)
-        st.button("🏥 Health Cabinet AI Lens", on_click=set_mode, args=("lens",))
+        st.markdown(f'<div class="{css}" style="display:flex; justify-content:flex-end;">', unsafe_allow_html=True)
+        st.button("🏥 Health Cabinet AI Lens", on_click=set_mode, args=("lens",), use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
         
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # 3. Filter Chips Row
+    c1, c2, c3, c4, c5 = st.columns([1.2, 1.2, 1.2, 1.2, 3])
+    c1.button("💊 Substrate: Silver Foil", on_click=set_search, args=("metformin",))
+    c2.button("✍️ Rx Doctor Script", on_click=set_search, args=("script",))
+    c3.button("🩸 Lab Blood Reports", on_click=set_search, args=("lab",))
+    c4.button("🧾 Pharmacy Receipts", on_click=set_search, args=("receipt",))
+    
     st.markdown("<br>", unsafe_allow_html=True)
     
     if st.session_state.health_mode == "lens":
