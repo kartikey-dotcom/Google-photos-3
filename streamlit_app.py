@@ -2,18 +2,18 @@ import streamlit as st
 
 st.set_page_config(layout="wide", page_title="Google Photos | Evidence Partition", initial_sidebar_state="expanded")
 
-# Inject Custom CSS to override Streamlit's default styling
+# Inject Custom CSS to override Streamlit's default styling for Google Photos Light Mode
 st.markdown("""
 <style>
-    /* Global Dark Theme Settings */
+    /* Global Light Theme Settings */
     :root {
-        --bg-color: #202124;
-        --sidebar-bg: #202124;
-        --text-main: #e8eaed;
-        --text-muted: #9aa0a6;
-        --accent: #8ab4f8;
-        --border: #3c4043;
-        --card-bg: #303134;
+        --bg-color: #ffffff;
+        --sidebar-bg: #ffffff;
+        --text-main: #202124;
+        --text-muted: #5f6368;
+        --accent: #1a73e8;
+        --border: #dadce0;
+        --card-bg: #ffffff;
     }
     
     .stApp {
@@ -42,7 +42,7 @@ st.markdown("""
         transition: background-color 0.2s ease;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"]:hover {
-        background-color: #3c4043 !important;
+        background-color: #f1f3f4 !important;
     }
     /* Hide the circular radio indicator */
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] > div:first-child {
@@ -50,10 +50,10 @@ st.markdown("""
     }
     /* Style for Active/Checked item */
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] {
-        background-color: #4285f422 !important;
+        background-color: #e8f0fe !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] p {
-        color: #8ab4f8 !important;
+        color: var(--accent) !important;
         font-weight: 600 !important;
     }
     
@@ -67,7 +67,7 @@ st.markdown("""
         margin-bottom: 20px;
     }
     .search-box {
-        background-color: #303134;
+        background-color: #f1f3f4;
         border-radius: 8px;
         padding: 10px 20px;
         width: 60%;
@@ -85,7 +85,7 @@ st.markdown("""
         flex-wrap: wrap;
     }
     .chip {
-        background-color: #303134;
+        background-color: #ffffff;
         border: 1px solid var(--border);
         border-radius: 16px;
         padding: 6px 16px;
@@ -107,7 +107,7 @@ st.markdown("""
     }
     .evidence-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
     }
     .card-img-container {
         position: relative;
@@ -119,19 +119,19 @@ st.markdown("""
         width: 100%;
         height: 100%;
         object-fit: cover;
-        opacity: 0.8;
     }
     .card-tag {
         position: absolute;
         top: 10px;
         right: 10px;
-        background-color: rgba(0,0,0,0.6);
+        background-color: rgba(255,255,255,0.9);
+        color: #202124;
         padding: 2px 8px;
         border-radius: 4px;
         font-size: 10px;
-        font-weight: 600;
+        font-weight: 700;
         text-transform: uppercase;
-        border: 1px solid #5f6368;
+        border: 1px solid var(--border);
     }
     .card-overlay {
         position: absolute;
@@ -141,11 +141,13 @@ st.markdown("""
         gap: 8px;
     }
     .overlay-pill {
-        background-color: rgba(32, 33, 36, 0.8);
+        background-color: rgba(255,255,255,0.9);
+        color: #202124;
         padding: 4px 10px;
         border-radius: 12px;
         font-size: 11px;
-        border: 1px solid #5f6368;
+        font-weight: 600;
+        border: 1px solid var(--border);
     }
     
     .card-content {
@@ -176,12 +178,13 @@ st.markdown("""
         border-radius: 20px;
         text-align: center;
         font-size: 13px;
-        font-weight: 500;
+        font-weight: 600;
         cursor: pointer;
     }
     .card-action.primary {
-        background-color: #8ab4f8;
-        color: #202124;
+        background-color: var(--accent);
+        color: #ffffff;
+        border-color: var(--accent);
     }
     
 </style>
@@ -189,10 +192,10 @@ st.markdown("""
 
 # 1. Interactive SIDEBAR Navigation
 with st.sidebar:
-    st.markdown("### 💠 Google Photos <span style='background:#303134; padding:2px 6px; border-radius:4px; font-size:10px; border:1px solid #5f6368;'>Labs</span>", unsafe_allow_html=True)
+    st.markdown("### 💠 Google Photos <span style='background:#f1f3f4; color:#5f6368; padding:2px 6px; border-radius:4px; font-size:10px; border:1px solid #dadce0;'>Labs</span>", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Interactive menu mapped to radio buttons, hidden circles via CSS
+    # Interactive menu mapped to radio buttons
     menu_options = [
         "🖼️ Photos",
         "🧭 Explore",
@@ -208,14 +211,14 @@ with st.sidebar:
     
     st.markdown("<br><br><br><br><br><br><br><br><br>", unsafe_allow_html=True)
     st.markdown("""
-    <div style="background-color: #303134; padding: 16px; border-radius: 12px; font-size: 12px;">
-        ☁️ <b>Storage Vault</b><br>
-        <span style="color:#9aa0a6;">1.4 TB of 2 TB used</span><br>
-        <div style="width:100%; height:4px; background:#5f6368; margin-top:8px; border-radius:2px;">
-            <div style="width:70%; height:100%; background:#8ab4f8; border-radius:2px;"></div>
+    <div style="background-color: #f1f3f4; padding: 16px; border-radius: 12px; font-size: 12px; border: 1px solid #dadce0;">
+        ☁️ <b style="color: #202124;">Storage Vault</b><br>
+        <span style="color:#5f6368;">1.4 TB of 2 TB used</span><br>
+        <div style="width:100%; height:4px; background:#dadce0; margin-top:8px; border-radius:2px;">
+            <div style="width:70%; height:100%; background:#1a73e8; border-radius:2px;"></div>
         </div>
         <br>
-        <span style="color:#8ab4f8;">Get more storage</span>
+        <span style="color:#1a73e8; font-weight:600;">Get more storage</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -226,7 +229,7 @@ if selected_nav == "📁 Evidence Partition":
     <div class="top-bar">
         <div class="search-box">
             🔍 LOT-GR-408 / SL-14
-            <span style="margin-left: auto; background-color: #41331c; color: #fbbc04; padding: 4px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #fbbc04;">✨ Evidence Lens: Active</span>
+            <span style="margin-left: auto; background-color: #fef7e0; color: #b06000; padding: 4px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #fbbc04; font-weight: 600;">✨ Evidence Lens: Active</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -243,18 +246,18 @@ if selected_nav == "📁 Evidence Partition":
         <div class="chip">⚡ 18ms latency</div>
         <div class="chip">🛡️ Clean Verification</div>
     </div>
-    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #3c4043; padding-bottom: 15px;">
+    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #dadce0; padding-bottom: 15px;">
         <div>
-            <span style="background-color: #303134; color: #9aa0a6; padding: 8px 16px; border-radius: 16px 0 0 16px; border: 1px solid #3c4043; font-size: 13px;">🕘 Photos Legacy Mode</span><span style="background-color: #4285f444; color: #8ab4f8; padding: 8px 16px; border-radius: 0 16px 16px 0; border: 1px solid #8ab4f8; font-size: 13px;">✨ Evidence Lens Lab (Active)</span>
+            <span style="background-color: #f1f3f4; color: #5f6368; padding: 8px 16px; border-radius: 16px 0 0 16px; border: 1px solid #dadce0; border-right: none; font-size: 13px;">🕘 Photos Legacy Mode</span><span style="background-color: #e8f0fe; color: #1a73e8; font-weight:600; padding: 8px 16px; border-radius: 0 16px 16px 0; border: 1px solid #8ab4f8; font-size: 13px;">✨ Evidence Lens Lab (Active)</span>
         </div>
-        <div style="font-size: 12px; color: #9aa0a6;">
+        <div style="font-size: 12px; color: #5f6368;">
             🔵 24 family photos from Himachal quarantined • 4 physical evidence assets verified
         </div>
     </div>
     """, unsafe_allow_html=True)
     
     # 4. MAIN GALLERY
-    st.markdown("<h4 style='font-weight: 500;'>Today • Sunday, Jun 2, 2024 <span style='font-size:12px; background:#303134; padding:4px 10px; border-radius:12px; margin-left:10px; color:#9aa0a6;'>Nagarjuna Sagar Field Site</span></h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='font-weight: 500; color:#202124;'>Today • Sunday, Jun 2, 2024 <span style='font-size:12px; background:#f1f3f4; padding:4px 10px; border-radius:12px; margin-left:10px; color:#5f6368; border: 1px solid #dadce0;'>Nagarjuna Sagar Field Site</span></h4>", unsafe_allow_html=True)
     
     cards = [
         {
@@ -316,13 +319,13 @@ if selected_nav == "📁 Evidence Partition":
                     <div class="card-tag">{c['tag']}</div>
                     <div class="card-overlay">
                         <div class="overlay-pill">{c['overlay1']}</div>
-                        <div class="overlay-pill" style="color:#8ab4f8; border-color:#8ab4f8;">{c['overlay2']}</div>
+                        <div class="overlay-pill" style="color:#1a73e8; border-color:#8ab4f8;">{c['overlay2']}</div>
                     </div>
                 </div>
                 <div class="card-content">
                     <div class="card-title">
                         <span>{c['title']}</span>
-                        <span style="font-size:10px; background:#4285f422; color:#8ab4f8; padding:2px 6px; border-radius:4px;">{c['score']}</span>
+                        <span style="font-size:10px; background:#e8f0fe; color:#1a73e8; padding:2px 6px; border-radius:4px; font-weight:700;">{c['score']}</span>
                     </div>
                     <div class="card-subtitle">{c['subtitle']}</div>
                     <div class="{action_class}">{c['action']}</div>
