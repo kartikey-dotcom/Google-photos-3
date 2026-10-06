@@ -517,5 +517,58 @@ elif selected_nav == "🧭 Explore":
         things_html += f'<div style="display:inline-block; margin-right: 16px; margin-bottom: 16px; cursor: pointer; border-radius: 12px; overflow: hidden; width: 120px; height: 120px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"><img src="{thing}?auto=format&fit=crop&w=200&h=200&q=80" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8);"><div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: 500; font-size: 14px; text-align: center; text-shadow: 0 1px 3px rgba(0,0,0,0.9);">{name}</div></div>'
     st.markdown(f"<div>{things_html}</div>", unsafe_allow_html=True)
 
-else:
-    st.info(f"You selected {{selected_nav}}. This is a placeholder for the MVP.")
+elif selected_nav == "👥 Sharing":
+    st.markdown("<h3 style='color:#202124; margin-bottom: 24px;'>Sharing</h3>", unsafe_allow_html=True)
+    st.markdown("<h5 style='color:#5f6368; margin-bottom: 16px;'>Shared with you</h5>", unsafe_allow_html=True)
+    st.info("Dr. Sarah Chen has shared 2 clinical documents with you.")
+    
+    st.markdown("<h5 style='color:#5f6368; margin-top: 24px; margin-bottom: 16px;'>Caregiver Access</h5>", unsafe_allow_html=True)
+    st.markdown('''
+    <div style="display:flex; align-items:center; padding:16px; border:1px solid #dadce0; border-radius:12px; max-width:600px;">
+        <div style="width:48px; height:48px; border-radius:50%; background:#1a73e8; color:white; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:600; margin-right:16px;">SC</div>
+        <div>
+            <div style="font-weight:600; color:#202124;">Dr. Sarah Chen (Primary Care)</div>
+            <div style="color:#5f6368; font-size:14px;">Can view Health Cabinet Lens only</div>
+        </div>
+        <div style="margin-left:auto; color:#1a73e8; font-weight:600; cursor:pointer;">Manage</div>
+    </div>
+    ''', unsafe_allow_html=True)
+
+elif selected_nav == "📚 Albums":
+    st.markdown("<h3 style='color:#202124; margin-bottom: 24px;'>Albums</h3>", unsafe_allow_html=True)
+    albums = {
+        '2024 Lab Reports': 'https://images.unsplash.com/photo-1579684385127-1ef15d508118',
+        'Summer Vacation': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
+        'Prescriptions': 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926',
+        'Family': 'https://images.unsplash.com/photo-1511895426328-dc8714191300'
+    }
+    cols = st.columns(4)
+    for i, (name, img) in enumerate(albums.items()):
+        with cols[i % 4]:
+            st.markdown(f'''
+            <div style="margin-bottom:24px; cursor:pointer;">
+                <div style="width:100%; aspect-ratio:1; border-radius:12px; overflow:hidden; margin-bottom:8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <img src="{img}?auto=format&fit=crop&w=400&h=400&q=80" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+                <div style="font-weight:500; color:#202124;">{name}</div>
+            </div>
+            ''', unsafe_allow_html=True)
+
+elif selected_nav == "📄 Documents":
+    st.markdown("<h3 style='color:#202124; margin-bottom: 24px;'>Documents</h3>", unsafe_allow_html=True)
+    st.markdown("<div style='display:flex; gap:16px; margin-bottom:24px;'><div style='padding:8px 16px; background:#e8f0fe; color:#1a73e8; border-radius:20px; font-weight:500; cursor:pointer;'>All</div><div style='padding:8px 16px; background:#f1f3f4; color:#5f6368; border-radius:20px; font-weight:500; cursor:pointer;'>Medical</div><div style='padding:8px 16px; background:#f1f3f4; color:#5f6368; border-radius:20px; font-weight:500; cursor:pointer;'>Receipts</div><div style='padding:8px 16px; background:#f1f3f4; color:#5f6368; border-radius:20px; font-weight:500; cursor:pointer;'>IDs</div></div>", unsafe_allow_html=True)
+    docs = [
+        'https://images.unsplash.com/photo-1579684385127-1ef15d508118',
+        'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c',
+        'https://images.unsplash.com/photo-1638202993928-7267aad84c31',
+        'https://images.unsplash.com/photo-1505751172876-fa1923c5c528'
+    ]
+    cols = st.columns(4)
+    for i, img in enumerate(docs):
+        with cols[i % 4]:
+            st.markdown(f'<div style="width:100%; aspect-ratio:3/4; border-radius:8px; overflow:hidden; margin-bottom:20px; border:1px solid #dadce0;"><img src="{img}?auto=format&fit=crop&w=400&h=533&q=80" style="width:100%; height:100%; object-fit:cover;"></div>', unsafe_allow_html=True)
+
+elif selected_nav == "🗑️ Trash":
+    st.markdown("<h3 style='color:#202124; margin-bottom: 24px;'>Trash</h3>", unsafe_allow_html=True)
+    st.markdown("<div style='padding:12px; background:#f1f3f4; color:#5f6368; border-radius:8px; font-size:14px; margin-bottom:24px;'>Items in trash will be permanently deleted after 60 days</div>", unsafe_allow_html=True)
+    st.markdown("<div style='color:#5f6368; font-style:italic;'>No items in trash.</div>", unsafe_allow_html=True)
