@@ -272,13 +272,13 @@ family_photos = [
     "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1473496169904-658ba37448eb?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?auto=format&fit=crop&w=400&q=80",
 ]
 
 document_photos = [
-    "https://images.unsplash.com/photo-1620577438165-22d7d8e20257?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1555621805-4c07a51d9eb1?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1586282391129-76a6df230234?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&w=400&q=80",
 ]
@@ -290,7 +290,7 @@ explore_faces = [
 ]
 
 explore_places = [
-    "https://images.unsplash.com/photo-1506744626753-eda818c9ce5f?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80",
 ]
 
@@ -378,7 +378,7 @@ sections = [
                 "tag": "DECOY",
                 "overlay1": "Substrate: Brick",
                 "overlay2": "Negative",
-                "img": "https://images.unsplash.com/photo-1541888946425-d0fbb186244f?auto=format&fit=crop&w=800&q=80",
+                "img": "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80",
                 "action": "📄 View Site Log",
                 "primary": False,
                 "score": "Negative",
