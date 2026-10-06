@@ -474,5 +474,58 @@ elif selected_nav == "🏥 Health Cabinet":
             with cols[i % 4]:
                 st.markdown(f'<div class="legacy-img-container"><img src="{img}"></div>', unsafe_allow_html=True)
 
+elif selected_nav == "🧭 Explore":
+    st.markdown("<h3 style='color:#202124; margin-bottom: 24px;'>Explore</h3>", unsafe_allow_html=True)
+    
+    # People
+    st.markdown("<h5 style='color:#5f6368; margin-top: 20px; margin-bottom: 16px;'>People & pets</h5>", unsafe_allow_html=True)
+    faces = [
+        'https://images.unsplash.com/photo-1534528741775-53994a69daeb',
+        'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d',
+        'https://images.unsplash.com/photo-1544005313-94ddf0286df2',
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d',
+        'https://images.unsplash.com/photo-1517841905240-472988babdf9'
+    ]
+    people_html = ''
+    for face in faces:
+        people_html += f'<img src="{face}?auto=format&fit=crop&w=150&h=150&q=80" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-right: 16px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">'
+    st.markdown(f"<div>{people_html}</div>", unsafe_allow_html=True)
+    
+    # Places
+    st.markdown("<h5 style='color:#5f6368; margin-top: 40px; margin-bottom: 16px;'>Places</h5>", unsafe_allow_html=True)
+    places = {
+        'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9': 'New York',
+        'https://images.unsplash.com/photo-1501594907352-04cda38ebc29': 'San Francisco',
+        'https://images.unsplash.com/photo-1494522855154-9297ac14b55f': 'Chicago'
+    }
+    places_html = ''
+    for place, name in places.items():
+        places_html += f"""
+        <div style="display:inline-block; margin-right: 16px; cursor: pointer; border-radius: 12px; overflow: hidden; width: 120px; height: 160px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <img src="{place}?auto=format&fit=crop&w=200&h=300&q=80" style="width: 100%; height: 100%; object-fit: cover;">
+            <div style="position: absolute; bottom: 8px; left: 8px; color: white; font-weight: 500; font-size: 14px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">{name}</div>
+        </div>
+        """
+    st.markdown(f"<div>{places_html}</div>", unsafe_allow_html=True)
+    
+    # Things
+    st.markdown("<h5 style='color:#5f6368; margin-top: 40px; margin-bottom: 16px;'>Things</h5>", unsafe_allow_html=True)
+    things = {
+        'https://images.unsplash.com/photo-1584308666744-24d5e4708709': 'Prescriptions',
+        'https://images.unsplash.com/photo-1579684385127-1ef15d508118': 'Lab Reports',
+        'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c': 'Receipts',
+        'https://images.unsplash.com/photo-1504674900247-0877df9cc836': 'Food',
+        'https://images.unsplash.com/photo-1519331379826-f10be5486c6f': 'Parks'
+    }
+    things_html = ''
+    for thing, name in things.items():
+        things_html += f"""
+        <div style="display:inline-block; margin-right: 16px; margin-bottom: 16px; cursor: pointer; border-radius: 12px; overflow: hidden; width: 120px; height: 120px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <img src="{thing}?auto=format&fit=crop&w=200&h=200&q=80" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8);">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: 500; font-size: 14px; text-align: center; text-shadow: 0 1px 3px rgba(0,0,0,0.9);">{name}</div>
+        </div>
+        """
+    st.markdown(f"<div>{things_html}</div>", unsafe_allow_html=True)
+
 else:
-    st.info(f"You selected {selected_nav}. This is a placeholder for the MVP.")
+    st.info(f"You selected {{selected_nav}}. This is a placeholder for the MVP.")
