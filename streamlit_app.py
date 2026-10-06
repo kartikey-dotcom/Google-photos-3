@@ -421,6 +421,104 @@ health_sections = [
                 "dialog": {"drug": "FluZone Quadrivalent", "strength": "0.5mL", "prescriber": "Apex Clinic Staff", "substrate": "Printed Cardstock", "batch": "Lot: 9942Z"}
             }
         ]
+    },
+    {
+        "date_header": "May 2024 • Dental Surgery & Recovery",
+        "cards": [
+            {
+                "title": "Amoxicillin Rx 500mg",
+                "subtitle": "May 20, 2024 • Dr. P. Smith",
+                "tag": "AMOXICILLIN 500MG",
+                "overlay1": "Substrate: Doctor Script",
+                "overlay2": "1 Tab TID",
+                "img": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=800&q=80",
+                "verified": "Verified Signature",
+                "bboxes": [{"type": "yellow", "text": "Amoxicillin", "top": "30%", "left": "25%"}],
+                "dialog": {"drug": "Amoxicillin", "strength": "500mg", "prescriber": "Dr. P. Smith", "substrate": "Handwritten Script", "batch": "N/A"}
+            },
+            {
+                "title": "Dental X-Ray Lab Panel",
+                "subtitle": "May 19, 2024 • Smile Imaging",
+                "tag": "PANORAMIC",
+                "overlay1": "Substrate: X-Ray Film",
+                "overlay2": "Clear",
+                "img": "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=800&q=80",
+                "verified": "Verified Imaging",
+                "bboxes": [{"type": "blue", "text": "Wisdom Tooth", "top": "40%", "left": "60%"}],
+                "dialog": {"drug": "Dental Imaging", "strength": "N/A", "prescriber": "Dr. P. Smith", "substrate": "Digital X-Ray", "batch": "IMG-993"}
+            },
+            {
+                "title": "Ibuprofen Rx 800mg",
+                "subtitle": "May 19, 2024 • Dr. P. Smith",
+                "tag": "IBUPROFEN",
+                "overlay1": "Substrate: Doctor Script",
+                "overlay2": "PRN Pain",
+                "img": "https://images.unsplash.com/photo-1550572017-edb3fb49619a?auto=format&fit=crop&w=800&q=80",
+                "verified": "Verified Signature",
+                "bboxes": [{"type": "yellow", "text": "Ibuprofen 800", "top": "50%", "left": "40%"}],
+                "dialog": {"drug": "Ibuprofen", "strength": "800mg", "prescriber": "Dr. P. Smith", "substrate": "Printed Script", "batch": "N/A"}
+            },
+            {
+                "title": "Dental Surgery Invoice",
+                "subtitle": "May 19, 2024 • Total $450 Paid",
+                "tag": "SMILE CLINIC",
+                "overlay1": "Substrate: Thermal Receipt",
+                "overlay2": "Paid in Full",
+                "img": "https://images.unsplash.com/photo-1620608579450-482260ff0d88?auto=format&fit=crop&w=800&q=80",
+                "verified": "Fiscal Slip",
+                "bboxes": [{"type": "blue", "text": "Total: $450", "bottom": "20%", "right": "10%"}],
+                "dialog": {"drug": "Dental Services", "strength": "N/A", "prescriber": "N/A", "substrate": "Paper Receipt", "batch": "Inv: 2289"}
+            }
+        ]
+    },
+    {
+        "date_header": "January 2024 • Urgent Care Visit",
+        "cards": [
+            {
+                "title": "Urgent Care Invoice",
+                "subtitle": "Jan 10, 2024 • Total $150 Paid",
+                "tag": "CITY MED",
+                "overlay1": "Substrate: Thermal Receipt",
+                "overlay2": "Copay",
+                "img": "https://images.unsplash.com/photo-1554224154-26032ffc0d07?auto=format&fit=crop&w=800&q=80",
+                "verified": "Fiscal Slip",
+                "bboxes": [{"type": "blue", "text": "Copay: $150", "bottom": "25%", "right": "15%"}],
+                "dialog": {"drug": "Consultation", "strength": "N/A", "prescriber": "N/A", "substrate": "Paper Receipt", "batch": "Inv: 994"}
+            },
+            {
+                "title": "Metformin ER 500mg Refill",
+                "subtitle": "Jan 10, 2024 • Express Pharmacy",
+                "tag": "METFORMIN 500MG",
+                "overlay1": "Substrate: Silver Foil",
+                "overlay2": "Lot: 1A22",
+                "img": "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?auto=format&fit=crop&w=800&q=80",
+                "verified": "Verified Salt: Metformin HCl",
+                "bboxes": [{"type": "blue", "text": "METFORMIN 500MG", "top": "35%", "left": "25%"}],
+                "dialog": {"drug": "Metformin Extended Release", "strength": "500mg", "prescriber": "City Med", "substrate": "Foil Pack", "batch": "1A22 • Exp: 05/2025"}
+            },
+            {
+                "title": "Metabolic Lab Panel",
+                "subtitle": "Jan 09, 2024 • City Med Lab",
+                "tag": "GLUCOSE: 105",
+                "overlay1": "Substrate: Lab Report",
+                "overlay2": "Fasting",
+                "img": "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80",
+                "verified": "Verified Lab",
+                "bboxes": [{"type": "yellow", "text": "GLUCOSE: 105", "top": "45%", "left": "30%"}],
+                "dialog": {"drug": "Basic Metabolic Panel", "strength": "N/A", "prescriber": "City Med", "substrate": "A4 Print", "batch": "SID: 11029"}
+            },
+            {
+                "title": "Azithromycin Rx Script",
+                "subtitle": "Jan 10, 2024 • City Med",
+                "tag": "AZITHROMYCIN",
+                "overlay1": "Substrate: Doctor Script",
+                "overlay2": "Z-Pak",
+                "img": "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=800&q=80",
+                "verified": "Verified Signature",
+                "bboxes": [{"type": "red", "text": "Azithromycin 250mg", "top": "55%", "left": "20%"}],
+                "dialog": {"drug": "Azithromycin", "strength": "250mg", "prescriber": "City Med", "substrate": "Printed Script", "batch": "N/A"}
+            }
+        ]
     }
 ]
 
@@ -489,7 +587,7 @@ elif selected_nav == "🏥 Health Cabinet":
     
     if st.session_state.health_mode == "lens":
         st.markdown('<div style="font-size: 12px; color: #9aa0a6; padding-bottom: 10px; margin-bottom: 20px;"><span style="background: rgba(138,180,248,0.1); color: #8ab4f8; padding: 4px 8px; border-radius: 12px;">⚡ 22ms Latency</span> &nbsp; <span style="background: rgba(138,180,248,0.1); color: #8ab4f8; padding: 4px 8px; border-radius: 12px;">🛡️ 0% Clutter Leakage</span> &nbsp; <span style="background: rgba(138,180,248,0.1); color: #8ab4f8; padding: 4px 8px; border-radius: 12px;">🎯 Match: Clinical Records</span></div>', unsafe_allow_html=True)
-        st.info("🛡️ **18 personal & family photos quarantined** from clinical stream • 8 clinical health records isolated & authenticated")
+        st.info("🛡️ **36 personal & family photos quarantined** from clinical stream • 16 clinical health records isolated & authenticated")
         
         for section in health_sections:
             filtered_cards = section["cards"]
