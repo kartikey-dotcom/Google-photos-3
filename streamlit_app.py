@@ -497,7 +497,7 @@ if selected_nav in ["🖼️ Photos", "📁 Evidence Partition"]:
     # 2. INTERACTIVE TOP BAR SEARCH
     col1, col2 = st.columns([5, 1])
     with col1:
-        st.session_state.search_query = st.text_input("Search", key="search_query", placeholder="🔍 Try searching: 'plumbing', 'stone slab', 'concrete', 'certificate', or 'pipe'", label_visibility="collapsed")
+        st.text_input("Search", key="search_query", placeholder="🔍 Try searching: 'plumbing', 'stone slab', 'concrete', 'certificate', or 'pipe'", label_visibility="collapsed")
     with col2:
         if st.session_state.search_query:
             st.markdown('<div style="background-color: #fef7e0; color: #b06000; padding: 6px 12px; border-radius: 16px; font-size: 12px; border: 1px solid #fbbc04; font-weight: 600; text-align: center; margin-top: 2px;">✨ Evidence Lens: Active</div>', unsafe_allow_html=True)
